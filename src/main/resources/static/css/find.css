@@ -1,0 +1,93 @@
+#container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 중앙 정렬 */
+  gap: 20px; /* div 간격 */
+  width: 100%;
+}
+
+/* 입력 필드와 버튼을 가로로 배치 */
+#search-user > div {
+    width: 100%;
+}
+
+#userId {
+    padding: 12px;
+    font-size: 15px;
+    width: 30%;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#userName {
+    padding: 12px;
+    font-size: 15px;
+    width: 30%;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#userEmail {
+    padding: 12px;
+    font-size: 15px;
+    width: 30%;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#findUserIdBtn {
+    padding: 12px 12px;
+    font-size: 18px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 20%;
+}
+
+#findUserPwdBtn {
+    padding: 12px 12px;
+    font-size: 18px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 20%;
+}
+
+#show-userInfo {
+    display: none;
+    width: 100%;
+    text-align: center;
+}
+
+.user-info-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+span {
+    padding: 12px;
+    text-align: center;
+    font-size: 15px;
+    width: auto;
+    margin: 0;
+}
+
+#checkBtn {
+    padding: 6px 12px;
+    font-size: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: auto;
+}

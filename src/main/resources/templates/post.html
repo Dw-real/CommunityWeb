@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <title>게시글 작성</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+<h2>게시글 쓰기</h2>
+<form id="postForm" enctype="multipart/form-data">
+  <input type="text" id="boardTitle"> <br>
+  <textarea id="boardContents" cols="50" rows="10"></textarea> <br>
+  <input type="file" id="boardFile" multiple><br>
+  <input type = "submit" value="작성 완료">
+</form>
+
+<script>
+  $(document).ready(function() {
+    $('#postForm').submit(function(event) {
+      event.preventDefault();
+
+      // 폼 데이터 추출
+      var boardTitle = $('#boardTitle').val();
+      var boardContents = $('#boardContents').val();
+      var userCode = [[${user.userCode}]];
+
+      var header = $("meta[name='_csrf_header']").attr('content');
+      var token = $("meta[name='_csrf']").attr('content');
+
+      // 파일 첨부 여부 확인
+      var formData = new FormData();
+      var boardFile = $('#boardFile')[0].files;
+
+      // 첨부된 파일이 있을 경우 FormData에 추가
+      if (boardFile.length > 0) {
+          formData.append("boardFile", boardFile[0]);
+      }
+
+      formData.append("boardTitle", boardTitle);
+      formData.append("boardContents", boardContents);
+      formData.append("userCode", userCode);
+
+      $.ajax({
+          url: '/community/post',
+          type: 'POST',
+          data: formData,
+          contentType: false,
+          processData: false,
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader(header, token);
+          },
+          success: function(response) {
+              window.location.href = '/';
+          },
+          error: function(xhr, status, error) {
+              // 오류가 발생하면 메시지 표시
+          }
+      });
+    });
+  });
+</script>
+</body>
+</html>

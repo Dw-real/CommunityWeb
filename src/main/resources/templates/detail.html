@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>detail</title>
+  <!-- jquery cdn -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+<table>
+  <tr>
+    <th>id</th>
+    <td th:text="${board.id}"></td>
+  </tr>
+  <tr>
+    <th>title</th>
+    <td th:text="${board.boardTitle}"></td>
+  </tr>
+  <tr>
+    <th>writer</th>
+    <td th:text="${board.boardWriter}"></td>
+  </tr>
+  <tr>
+    <th>date</th>
+    <td th:text="${formattedCreatedTime }"></td>
+  </tr>
+  <tr>
+    <th>hits</th>
+    <td th:text="${board.boardHits}"></td>
+  </tr>
+  <tr>
+    <th>contents</th>
+    <td th:text="${board.boardContents}"></td>
+  </tr>
+  <tr th:if="${board.fileAttached == 1}">
+    <th>image</th>
+    <td th:each="fileName: ${board.storedFileName}">
+      <img th:src="@{|/upload/${fileName}|}" alt="">
+    </td>
+  </tr>
+</table>
+
+<button id ="listBtn" onclick="listReq()" data-page="[[${page}]]">목록</button>
+<button id = "updateBtn" onclick="updateReq()" data-board-Id=[[${board.id}]]>수정</button>
+<button id = "deleteBtn" onclick="deleteReq()" data-board-Id=[[${board.id}]]>삭제</button>
+
+<script>
+  window.onload = function() {
+      var isWriter = [[${isWriter}]];
+      toggleDisplay(isWriter);
+  };
+
+  function listReq() {
+    const page = [[${page}]];
+    location.href = "/community/?page=" + page;
+  }
+
+  function updateReq() {
+    const boardId = [[${board.id}]];
+    console.log(boardId);
+    location.href = "/community/update/" + boardId;
+  }
+
+  function deleteReq() {
+    const boardId = [[${board.id}]];
+    location.href = "/community/delete/" + boardId;
+  }
+
+</script>
+
+<script src="/javascript/detail.js"></script>
+</body>
+</html>

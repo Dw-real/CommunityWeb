@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <title>비밀번호 변경</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/inputForm.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="updatePwd">
+  <h2>비밀번호 변경</h2>
+  <input type="password" id="currentPwd" placeholder="현재 비밀번호">
+  <input type="password" id="newPwd" placeholder="새로운 비밀번호">
+  <input type="password" id="checkNewPwd" placeholder="한번 더 입력">
+  <button id="updatePwdBtn" onclick="updatePwd()">비밀번호 변경</button>
+  <p id="notice"></p>
+</div>
+<script src="/javascript/updatePwd.js"></script>
+</body>
+</html>

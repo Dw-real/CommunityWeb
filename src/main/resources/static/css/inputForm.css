@@ -1,0 +1,33 @@
+#updatePwd, #logIn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 70px;
+}
+
+
+#currentPwd, #newPwd, #checkNewPwd, #userId, #userPwd {
+    padding: 16px;
+    font-size: 15px;
+    margin-bottom: 10px;
+    width: 200px;
+}
+
+#updatePwdBtn, #logInBtn {
+    padding: 16px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 200px;
+    margin-bottom:10px;
+}
+
+p {
+    font-size: 15px;
+    color: red;
+    text-align: center;
+}

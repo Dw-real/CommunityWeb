@@ -1,0 +1,73 @@
+/* 폼 전체를 중앙에 배치 */
+#account-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px; /* 폼의 최대 너비 설정 */
+    margin: 0 auto; /* 화면 중앙에 배치 */
+    padding: 20px;
+    border: 1px solid #ddd; /* 테두리 추가 */
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 개별 폼 요소들을 세로로 정렬 */
+.form-group, .field {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* 전체 너비 사용 */
+    margin-bottom: 15px;
+}
+
+/* 라벨 중앙 정렬 */
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* 입력 필드 스타일 */
+input, select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+p {
+    font-size: 12px;
+    color: red;
+    margin-top: 5px;
+    text-align: left; /* 안내 텍스트는 왼쪽 정렬 */
+}
+
+/* 버튼 스타일 */
+button[type="submit"] {
+    padding: 12px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.input-container {
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 */
+    width: 100%;
+}
+
+#checkIdBtn {
+    padding: 10px;
+    font-size: 12px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left : 10px;
+    width: 30%;
+}

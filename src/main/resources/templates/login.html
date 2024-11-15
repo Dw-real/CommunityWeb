@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <title>로그인</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/inputForm.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="logIn">
+  <h2>로그인</h2>
+  <input type="text" id="userId" placeholder="아이디">
+  <input type="password" id="userPwd" placeholder="비밀번호">
+  <button id="logInBtn" onclick="logIn()">로그인</button>
+
+  <p id="inputNotice"></p>
+</div>
+<script src="/javascript/login.js"></script>
+</body>
+</html>

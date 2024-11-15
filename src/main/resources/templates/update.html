@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게시글 수정</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+<h1>게시글 수정</h1>
+
+<!-- 게시글 수정 폼 -->
+<form id="updateForm">
+  <input type="text" id="boardTitle" name="boardTitle"  th:value="${boardUpdate.boardTitle}" required /><br><br>
+
+  <textarea id="boardContent" name="boardContent" rows="10" cols="50" th:text="${boardUpdate.boardContents}" required></textarea><br><br>
+
+  <button type="submit">수정하기</button>
+</form>
+
+<script>
+  $(document).ready(function() {
+      $('#updateForm').submit(function(e) {
+          e.preventDefault();
+
+          var boardId = [[${boardUpdate.id}]];
+          var boardTitle = $('#boardTitle').val();
+          var boardContent = $('#boardContent').val();
+          var userCode = [[${boardUpdate.userCode}]];
+
+          var header = $("meta[name='_csrf_header']").attr('content');
+          var token = $("meta[name='_csrf']").attr('content');
+
+          $.ajax({
+              url: '/community/update/' + boardId,
+              type: 'PUT',
+              contentType: 'application/json',
+              beforeSend: function(xhr) {
+              xhr.setRequestHeader(header, token);
+              },
+              data: JSON.stringify({
+                  id : boardId,
+                  boardTitle: boardTitle,
+                  boardContents: boardContent,
+                  userCode: userCode
+              }),
+              success: function(response) {
+                  alert('게시글이 수정되었습니다.');
+                  window.location.href = "/community/" + boardId;
+              },
+              error: function(error) {
+                  alert('게시글 수정에 실패했습니다.');
+              }
+          });
+      });
+  });
+</script>
+</body>
+</html>

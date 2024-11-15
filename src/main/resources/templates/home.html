@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<h1>게시판</h1>
+<div class="top-right-links">
+    <span id="create">회원 가입</span>
+    <span id="userId" style="display:none;"></span>
+    <span id="login">로그인</span>
+    <span id="logout" style="display:none;">로그아웃</span>
+    <span id="findId">아이디 찾기</span>
+    <span id="updatePwd" style="display:none;">비밀번호 변경</span>
+    <span id="findPwd">비밀번호 찾기</span>
+</div>
+
+<!-- 게시글 목록 -->
+<table>
+    <tr>
+        <th>id</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>작성일</th>
+        <th>조회수</th>
+    </tr>
+    <tr th:each="board : ${boardList}">
+        <td th:text="${board.id}"></td>
+        <td id="boardTitle"><a th:href="@{|/community/${board.id}|(page=${boardList.number + 1})}" th:text="${board.boardTitle}"></a></td>
+        <td th:text="${board.boardWriter}"></td>
+        <td th:text="*{#temporals.format(board.boardCreatedTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${board.boardHits}"></td>
+    </tr>
+</table>
+
+<!-- 페이지 네비게이션 -->
+<div class="pagination">
+    <a th:href="@{/(page=1)}">첫 페이지</a>
+    <a th:href="${boardList.first} ? '#' : @{/(page=${boardList.number})}">이전</a>
+
+    <span th:each="page : ${#numbers.sequence(startPage, endPage)}">
+        <span th:if="${page == boardList.number + 1}" th:text="${page}"></span>
+        <span th:unless="${page == boardList.number + 1}">
+            <a th:href="@{/(page=${page})}" th:text="${page}"></a>
+        </span>
+    </span>
+
+    <a th:href="${boardList.last} ? '#' : @{/(page=${boardList.number + 2})}">다음</a>
+    <a th:href="@{/(page=${boardList.totalPages})}">마지막 페이지</a>
+</div>
+
+<button id="postBtn" onclick="posting()">글 쓰기</button>
+
+<script>
+    window.onload = function() {
+        var loggedIn = [[${loggedIn}]];
+        var userId = "[[${userId}]]";
+
+        toggleDisplay(loggedIn, userId);
+    };
+</script>
+
+<script src="/javascript/home.js"></script>
+</body>
+</html>
