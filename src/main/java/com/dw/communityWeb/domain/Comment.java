@@ -1,5 +1,6 @@
 package com.dw.communityWeb.domain;
 
+import com.dw.communityWeb.presentation.dto.comment.CommentDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,12 +30,13 @@ public class Comment extends Base {
     @JoinColumn(name = "user_code")
     private User user;
 
-//    public static Comment toEntity(CommentDto commentDto, Board board, User user) {
-//        Comment comment = new Comment();
-//        comment.setCommentWriter(user.getName());
-//        comment.setCommentContents(commentDto.getCommentContents());
-//        comment.setBoard(board);
-//
-//        return comment;
-//    }
+    public static Comment toEntity(CommentDto commentDto, Board board, User user) {
+        Comment comment = new Comment();
+        comment.setCommentWriter(user.getId());
+        comment.setCommentContents(commentDto.getCommentContents());
+        comment.setBoard(board);
+        comment.setUser(user);
+
+        return comment;
+    }
 }

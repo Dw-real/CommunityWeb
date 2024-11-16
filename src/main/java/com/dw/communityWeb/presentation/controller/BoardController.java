@@ -1,7 +1,10 @@
 package com.dw.communityWeb.presentation.controller;
 
 import com.dw.communityWeb.application.BoardService;
+import com.dw.communityWeb.application.CommentService;
+import com.dw.communityWeb.domain.Comment;
 import com.dw.communityWeb.presentation.dto.board.BoardDto;
+import com.dw.communityWeb.presentation.dto.comment.CommentDto;
 import com.dw.communityWeb.presentation.dto.user.UserDto;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +17,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Controller
 @RequestMapping("/community")
 public class BoardController {
 
     private final BoardService boardService;
+    private final CommentService commentService;
 
     @Autowired
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardService boardService, CommentService commentService) {
         this.boardService = boardService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/post")
@@ -53,6 +59,9 @@ public class BoardController {
         boardService.updateHits(id);
         BoardDto boardDto = boardService.findById(id);
 
+        // 댓글 목록 가져오기
+        List<CommentDto> commentDtoList = commentService.findAll(id);
+
         // 게시글 조회하는 사람이 작성자인 경우
         if (loggedInUser.getUserCode().equals(boardDto.getUserCode())) {
             isWriter = true;
@@ -63,8 +72,10 @@ public class BoardController {
 
         model.addAttribute("board", boardDto);
         model.addAttribute("page", pageable.getPageNumber());
+        model.addAttribute("commentList", commentDtoList);
         model.addAttribute("formattedCreatedTime", formattedCreatedTime);
         model.addAttribute("isWriter", isWriter);
+        model.addAttribute("user", loggedInUser);
 
         return "detail";
     }

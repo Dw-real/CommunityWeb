@@ -43,8 +43,8 @@
       formData.append("userCode", userCode);
 
       $.ajax({
-          url: '/community/post',
           type: 'POST',
+          url: '/community/post',
           data: formData,
           contentType: false,
           processData: false,

@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf" th:content="${_csrf.token}">
   <title>detail</title>
   <!-- jquery cdn -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -44,6 +46,30 @@
 <button id = "updateBtn" onclick="updateReq()" data-board-Id=[[${board.id}]]>수정</button>
 <button id = "deleteBtn" onclick="deleteReq()" data-board-Id=[[${board.id}]]>삭제</button>
 
+<!-- 댓글 작성 부분 -->
+<div id="comment-write">
+  <input type="text" id="commentContents">
+  <button id="commentWriteBtn" onclick="commentWrite()">댓글 작성</button>
+</div>
+
+<!-- 댓글 출력 부분 -->
+<div id="comment-list">
+  <table>
+    <tr>
+      <th>댓글번호</th>
+      <th>작성자</th>
+      <th>내용</th>
+      <th>작성시간</th>
+    </tr>
+    <tr th:each="comment: ${commentList}">
+      <td th:text="${comment.id}"></td>
+      <td th:text="${comment.commentWriter}"></td>
+      <td th:text="${comment.commentContents}"></td>
+      <td th:text="${comment.commentCreatedTime}"></td>
+    </tr>
+  </table>
+</div>
+
 <script>
   window.onload = function() {
       var isWriter = [[${isWriter}]];
@@ -66,6 +92,57 @@
     location.href = "/community/delete/" + boardId;
   }
 
+  function commentWrite() {
+    const contents = document.getElementById("commentContents").value;
+    const boardId = [[${board.id}]];
+    const userCode = [[${user.userCode}]];
+
+    var header = $("meta[name='_csrf_header']").attr('content');
+    var token = $("meta[name='_csrf']").attr('content');
+
+    $.ajax({
+      type: 'POST',
+      url: '/comment/save',
+      contentType:'application/json',
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader(header, token);
+      },
+      data: JSON.stringify({
+          "commentContents": contents,
+          "boardId": boardId,
+          "userCode": userCode
+      }),
+      success: function(response) {
+           let output = "<table>";
+           output += "<tr><th>댓글번호</th>";
+           output += "<th>작성자</th>";
+           output += "<th>내용</th>";
+           output += "<th>작성시간</th></tr>";
+           for (let i in response) {
+               const createdTime = new Date(response[i].commentCreatedTime);
+               const formattedTime = `${createdTime.getFullYear()}-${(createdTime.getMonth() + 1).toString().padStart(2, '0')}-${createdTime.getDate().toString().padStart(2, '0')} ${createdTime.getHours().toString().padStart(2, '0')}:${createdTime.getMinutes().toString().padStart(2, '0')}`;
+               output += "<tr>";
+               output += "<td>" + response[i].id + "</td>";
+               output += "<td>" + response[i].commentWriter + "</td>";
+               output += "<td>" + response[i].commentContents + "</td>";
+               output += "<td>" + formattedTime + "</td>";
+               output += "</tr>";
+           }
+           output += "</table>";
+           document.getElementById('comment-list').innerHTML = output;
+           document.getElementById('commentContents').value = '';
+      },
+      error: function(xhr, status, error) {
+          try {
+              // 서버에서 반환된 오류 메시지를 추출하여 alert로 표시
+              const errorResponse = JSON.parse(xhr.responseText);
+              alert(errorResponse.errors.join("\n"));
+          } catch (e) {
+              alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+          }
+      }
+    });
+  }
 </script>
 
 <script src="/javascript/detail.js"></script>
