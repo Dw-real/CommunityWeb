@@ -42,7 +42,7 @@ public class HomeController {
 
         model.addAttribute("boardList", boardList);
         model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", 10);
+        model.addAttribute("endPage", endPage);
 
         return "home";
     }
