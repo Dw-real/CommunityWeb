@@ -1,6 +1,6 @@
 .top-right-links {
     position: absolute;
-    top: 20px;
+    top: 30px;
     right: 20px;
 }
 
@@ -14,10 +14,33 @@
 .top-right-links span:hover {
     text-decoration: underline;
 }
+
+/* 게시판 목록 */
+.board-list {
+    width:100%;
+    margin-top: 50px;
+    display: flex;
+    justify-content:center;
+    border: 1px solid black;
+    border-left: none;
+    border-right: none;
+}
+
+.board-list span {
+    margin: auto;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.board-list span:hover {
+    text-decoration: underline;
+}
+
 /* 게시글 목록 */
 table {
-    width: 80%; /* 테이블 크기 자동 조정 */
-    margin: 20px auto; /* 중앙 정렬 */
+    width: 100%; /* 테이블 크기 자동 조정 */
+    margin-top: 50px;
     border-collapse: collapse;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -47,56 +70,49 @@ table td a:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    list-style: none;
-    padding: 10px;
-    margin-top: 30px;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    margin-top: 20px;
 }
 
-.pagination a, .pagination .page-link {
-    padding: 8px 16px;
+.pagination span, .pagination a {
+    display: inline-block;
+    padding: 10px 15px;
     margin: 0 5px;
-    text-decoration: none;
-    color: #007bff;
+    font-size: 16px;
+    font-weight: bold;
     border-radius: 4px;
     transition: background-color 0.3s, color 0.3s;
 }
 
-.pagination a:hover, .pagination .page-link:hover {
+.pagination span {
+    color: #007bff;
+    cursor: default;
+}
+
+.pagination .current-page {
+    color: black;
+}
+
+.pagination a {
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.pagination a:hover {
     background-color: #0056b3;
-    color: #fff;
-}
-
-.pagination .current {
-    font-weight: bold;
-    color: #000;
-}
-
-.pagination .first, .pagination .last {
-    font-size: 14px;
-}
-
-.pagination .prev, .pagination .next {
-    font-size: 16px;
-}
-
-.pagination a:disabled {
-    color: #ccc;
-    pointer-events: none;
+    color: white;
+    border-color: #0056b3;
 }
 
 #postBtn {
     position: absolute;
-    bottom: 10px;
-    right: 30px;
+    bottom: 185px;
+    right: 10px;
     padding: 10px 20px;
     background-color: #0073e6;
     color: white;
     border: none;
     border-radius: 5px;
-    font-size: 10px;
+    font-size: 12px;
     cursor: pointer;
 }

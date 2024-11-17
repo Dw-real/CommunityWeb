@@ -18,6 +18,10 @@ document.getElementById("updatePwd").addEventListener('click', function() {
     location.href = "/user/updatePwd";
 });
 
+document.getElementById("allBoard").addEventListener('click', function() {
+    location.href = "/";
+});
+
 function toggleDisplay(loggedIn, userId) {
     if (loggedIn) { // 로그인 성공
         document.getElementById('create').style.display = 'none';

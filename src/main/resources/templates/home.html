@@ -20,10 +20,17 @@
     <span id="findPwd">비밀번호 찾기</span>
 </div>
 
+<!--게시판 목록-->
+<div class="board-list">
+    <span id="allBoard">전체</span>
+    <span id="freeBoard">자유게시판</span>
+    <span id="qnaBoard">Q&A게시판</span>
+</div>
+
 <!-- 게시글 목록 -->
 <table>
     <tr>
-        <th>게시글 번호</th>
+        <th>No.</th>
         <th>제목</th>
         <th>작성자</th>
         <th>작성일</th>
@@ -40,18 +47,18 @@
 
 <!-- 페이지 네비게이션 -->
 <div class="pagination">
-    <a th:href="@{/(page=1)}">첫 페이지</a>
-    <a th:href="${boardList.first} ? '#' : @{/(page=${boardList.number})}">이전</a>
+    <a th:href="@{/(page=1)}"> << </a>
+    <a th:href="${boardList.first} ? '#' : @{/(page=${boardList.number})}"> < </a>
 
     <span th:each="page : ${#numbers.sequence(startPage, endPage)}">
-        <span th:if="${page == boardList.number + 1}" th:text="${page}"></span>
+        <span th:if="${page == boardList.number + 1}" th:text="${page}" class="current-page"></span>
         <span th:unless="${page == boardList.number + 1}">
             <a th:href="@{/(page=${page})}" th:text="${page}"></a>
         </span>
     </span>
 
-    <a th:href="${boardList.last} ? '#' : @{/(page=${boardList.number + 2})}">다음</a>
-    <a th:href="@{/(page=${boardList.totalPages})}">마지막 페이지</a>
+    <a th:href="${boardList.last} ? '#' : @{/(page=${boardList.number + 2})}"> > </a>
+    <a th:href="@{/(page=${boardList.totalPages})}"> >> </a>
 </div>
 
 <button id="postBtn" onclick="posting()">글 쓰기</button>
