@@ -4,40 +4,40 @@
   <meta charset="UTF-8">
   <meta name="_csrf_header" th:content="${_csrf.headerName}">
   <meta name="_csrf" th:content="${_csrf.token}">
-  <title>detail</title>
-  <!-- jquery cdn -->
+  <title th:text="${board.boardTitle}"></title>
+  <link rel="stylesheet" href="/css/detail.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 <body>
 <table>
   <tr>
-    <th>id</th>
+    <th>게시글 번호</th>
     <td th:text="${board.id}"></td>
   </tr>
   <tr>
-    <th>title</th>
+    <th>제목</th>
     <td th:text="${board.boardTitle}"></td>
   </tr>
   <tr>
-    <th>writer</th>
+    <th>작성자</th>
     <td th:text="${board.boardWriter}"></td>
   </tr>
   <tr>
-    <th>date</th>
+    <th>작성일</th>
     <td th:text="${formattedCreatedTime }"></td>
   </tr>
   <tr>
-    <th>hits</th>
+    <th>조회수</th>
     <td th:text="${board.boardHits}"></td>
   </tr>
   <tr>
-    <th>contents</th>
+    <th>내용</th>
     <td th:text="${board.boardContents}"></td>
   </tr>
   <tr th:if="${board.fileAttached == 1}">
-    <th>image</th>
-    <td th:each="fileName: ${board.storedFileName}">
-      <img th:src="@{|/upload/${fileName}|}" alt="">
+    <th>첨부 파일</th>
+    <td class="image-container" th:each="fileName: ${board.storedFileName}">
+      <img th:src="@{|/upload/${fileName}|}" alt="" class = "resize-image">
     </td>
   </tr>
 </table>
@@ -74,11 +74,30 @@
   window.onload = function() {
       var isWriter = [[${isWriter}]];
       toggleDisplay(isWriter);
+
+      document.querySelectorAll('.resize-image').forEach(function(img) {
+        // 이미지가 이미 로드된 경우 크기를 즉시 체크
+        if (img.complete) {
+            resizeImage(img);
+        } else {
+            // 이미지 로드 후 크기를 체크
+            img.onload = function() {
+                resizeImage(img);
+            };
+        }
+      });
+
+      function resizeImage(img) {
+        if (img.width > 500) {  // 너비가 500px을 초과하면
+            img.style.width = '500px';  // 크기를 500px로 축소
+            img.style.height = 'auto';  // 높이는 자동으로 비율에 맞춰 조정
+        }
+      }
   };
 
   function listReq() {
     const page = [[${page}]];
-    location.href = "/community/?page=" + page;
+    location.href = "/?page=" + page;
   }
 
   function updateReq() {
