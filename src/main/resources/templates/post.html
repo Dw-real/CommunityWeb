@@ -21,7 +21,6 @@
     $('#postForm').submit(function(event) {
       event.preventDefault();
 
-      // 폼 데이터 추출
       var boardTitle = $('#boardTitle').val();
       var boardContents = $('#boardContents').val();
       var userCode = [[${user.userCode}]];
@@ -33,9 +32,11 @@
       var formData = new FormData();
       var boardFile = $('#boardFile')[0].files;
 
-      // 첨부된 파일이 있을 경우 FormData에 추가
+      // formData에 파일 추가
       if (boardFile.length > 0) {
-          formData.append("boardFile", boardFile[0]);
+        for (var i = 0; i < boardFile.length; i++) {
+            formData.append("boardFile", boardFile[i]);
+        }
       }
 
       formData.append("boardTitle", boardTitle);
