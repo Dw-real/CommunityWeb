@@ -5,15 +5,17 @@
   <meta name="_csrf_header" th:content="${_csrf.headerName}">
   <meta name="_csrf" th:content="${_csrf.token}">
   <title>게시글 작성</title>
+  <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/posting.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 <body>
-<h2>게시글 쓰기</h2>
+<h1>게시글 작성</h1>
 <form id="postForm" enctype="multipart/form-data">
+  <label for="boardFile" class="custom-file-label"></label>
+  <input type="file" id="boardFile" class="custom-file-input" multiple hidden><br>
   <input type="text" id="boardTitle"> <br>
   <textarea id="boardContents" cols="50" rows="10"></textarea> <br>
-  <input type="file" id="boardFile" multiple><br>
   <input type = "submit" value="작성 완료">
 </form>
 

@@ -6,14 +6,17 @@
   <meta name="_csrf" th:content="${_csrf.token}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>게시글 수정</title>
+  <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/posting.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 <body>
-<h2>게시글 수정</h2>
+<h1>게시글 수정</h1>
 
 <!-- 게시글 수정 폼 -->
 <form id="updateForm" enctype="multipart/form-data">
+  <label for="boardFile" class="custom-file-label"></label>
+  <input type="file" id="boardFile" class="custom-file-input" multiple hidden><br>
   <input type="text" id="boardTitle" name="boardTitle"  th:value="${boardUpdate.boardTitle}" required /><br><br>
   <textarea id="boardContent" name="boardContent" rows="10" cols="50" th:text="${boardUpdate.boardContents}" required></textarea><br><br>
   <ul id="fileList">
@@ -22,7 +25,6 @@
       <button type="button" class="deleteFileButton">삭제</button>
     </li>
   </ul>
-  <input type="file" id="newFile" multiple><br>
   <button type="submit">수정하기</button>
 </form>
 
