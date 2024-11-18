@@ -1,5 +1,6 @@
 package com.dw.communityWeb.domain;
 
+import com.dw.communityWeb.presentation.dto.board.BoardUpdateDto;
 import com.dw.communityWeb.presentation.dto.board.BoardDto;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -65,13 +66,13 @@ public class Board extends Base {
         return board;
     }
 
-    public static Board updateEntity(BoardDto boardDto, User user) {
+    public static Board updateEntity(BoardUpdateDto boardUpdateDto, User user) {
         Board board = new Board();
-        board.setId(boardDto.getId());
+        board.setId(boardUpdateDto.getUserCode());
         board.setBoardWriter(user.getId());
-        board.setBoardTitle(boardDto.getBoardTitle());
-        board.setBoardContents(boardDto.getBoardContents());
-        board.setBoardHits(boardDto.getBoardHits());
+        board.setBoardTitle(boardUpdateDto.getBoardTitle());
+        board.setBoardContents(boardUpdateDto.getBoardContents());
+        board.setBoardHits(boardUpdateDto.getBoardHits());
         board.setUser(user);
 
         return board;

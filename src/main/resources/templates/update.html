@@ -12,40 +12,66 @@
 <h1>게시글 수정</h1>
 
 <!-- 게시글 수정 폼 -->
-<form id="updateForm">
+<form id="updateForm" enctype="multipart/form-data">
   <input type="text" id="boardTitle" name="boardTitle"  th:value="${boardUpdate.boardTitle}" required /><br><br>
-
   <textarea id="boardContent" name="boardContent" rows="10" cols="50" th:text="${boardUpdate.boardContents}" required></textarea><br><br>
-
+  <ul id="fileList">
+    <li th:each="file, iterStat : ${boardUpdate.storedFileName}">
+      <span th:text="${file}"></span>
+      <button type="button" class="deleteFileButton">삭제</button>
+    </li>
+  </ul>
+  <input type="file" id="newFile" multiple><br>
   <button type="submit">수정하기</button>
 </form>
 
 <script>
   $(document).ready(function() {
+      let removedFiles = [];
+
+      $('.deleteFileButton').click(function() {
+          const fileName = $(this).siblings('span').text();
+          removedFiles.push(fileName);
+          $(this).closest('li').remove();
+      });
+
       $('#updateForm').submit(function(e) {
           e.preventDefault();
 
-          var boardId = [[${boardUpdate.id}]];
-          var boardTitle = $('#boardTitle').val();
-          var boardContent = $('#boardContent').val();
-          var userCode = [[${boardUpdate.userCode}]];
+          const boardId = [[${boardUpdate.id}]];
+          const boardTitle = $('#boardTitle').val();
+          const boardContent = $('#boardContent').val();
+          const userCode = [[${boardUpdate.userCode}]];
+          const boardHits = [[${boardUpdate.boardHits}]];
 
           var header = $("meta[name='_csrf_header']").attr('content');
           var token = $("meta[name='_csrf']").attr('content');
 
+          const formData = new FormData();
+          formData.append("boardId", boardId);
+          formData.append("boardTitle", boardTitle);
+          formData.append("boardContents", boardContent);
+          formData.append("userCode", userCode);
+          formData.append("boardHits", boardHits);
+
+          const newFiles = $('#newFile')[0].files;
+          for (let i = 0; i < newFiles.length; i++) {
+              formData.append("newFiles", newFiles[i]);
+          }
+
+          removedFiles.forEach(file => {
+              formData.append("removedFiles", file);
+          });
+
           $.ajax({
-              url: '/community/update/' + boardId,
               type: 'PUT',
-              contentType: 'application/json',
+              url: '/community/update/' + boardId,
+              processData: false,
+              contentType: false,
               beforeSend: function(xhr) {
               xhr.setRequestHeader(header, token);
               },
-              data: JSON.stringify({
-                  id : boardId,
-                  boardTitle: boardTitle,
-                  boardContents: boardContent,
-                  userCode: userCode
-              }),
+              data: formData,
               success: function(response) {
                   alert('게시글이 수정되었습니다.');
                   window.location.href = "/community/" + boardId;

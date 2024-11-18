@@ -2,7 +2,7 @@ package com.dw.communityWeb.presentation.controller;
 
 import com.dw.communityWeb.application.BoardService;
 import com.dw.communityWeb.application.CommentService;
-import com.dw.communityWeb.domain.Comment;
+import com.dw.communityWeb.presentation.dto.board.BoardUpdateDto;
 import com.dw.communityWeb.presentation.dto.board.BoardDto;
 import com.dw.communityWeb.presentation.dto.comment.CommentDto;
 import com.dw.communityWeb.presentation.dto.user.UserDto;
@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,9 +88,11 @@ public class BoardController {
         return "update";
     }
 
+    @Transactional
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody BoardDto boardDto, Model model) {
-        BoardDto updatedBoardDto = boardService.update(id, boardDto);
+    public ResponseEntity<?> update(@PathVariable Long id, @ModelAttribute BoardUpdateDto boardUpdateDto, Model model)
+    throws IOException {
+        BoardDto updatedBoardDto = boardService.update(id, boardUpdateDto);
         model.addAttribute("board", updatedBoardDto);
         return ResponseEntity.ok(updatedBoardDto);
     }

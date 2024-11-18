@@ -6,6 +6,7 @@ import com.dw.communityWeb.domain.User;
 import com.dw.communityWeb.infrastructure.BoardFileRepository;
 import com.dw.communityWeb.infrastructure.BoardRepository;
 import com.dw.communityWeb.infrastructure.UserRepository;
+import com.dw.communityWeb.presentation.dto.board.BoardUpdateDto;
 import com.dw.communityWeb.presentation.dto.board.BoardDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,7 +40,7 @@ public class BoardService {
         Optional<User> userEntity = userRepository.findById(boardDto.getUserCode());
 
         if (userEntity.isPresent()) {
-            if (boardDto.getBoardFile() == null) {
+            if (boardDto.getBoardFile() == null || boardDto.getBoardFile().isEmpty()) {
                 Board board = Board.toEntity(boardDto, userEntity.orElse(null));
                 boardRepository.save(board);
             } else {
@@ -100,14 +102,43 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardDto update(Long id, BoardDto boardDto) {
+    public BoardDto update(Long id, BoardUpdateDto boardUpdateDto) throws IOException {
         Board existBoard = boardRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
 
-        User existUser = userRepository.findById(boardDto.getUserCode())
+        User existUser = userRepository.findById(boardUpdateDto.getUserCode())
                 .orElseThrow(() -> new RuntimeException("해당 사용자가 존재하지 않습니다."));
 
-        Board updatedBoard = Board.updateEntity(boardDto, existUser);
+        Board updatedBoard = Board.updateEntity(boardUpdateDto, existUser);
+
+        // 삭제한 파일이 있는 경우
+        if (boardUpdateDto.getRemovedFiles() != null) {
+            List<String> filesToDelete = boardUpdateDto.getRemovedFiles();
+            for (String fileName : filesToDelete) {
+                boardFileRepository.deleteByStoredFileName(fileName);
+            }
+            if (!boardFileRepository.findByBoardId(boardUpdateDto.getBoardId()).isEmpty()) {
+                updatedBoard.setFileAttached(1);
+            }
+            else {
+                updatedBoard.setFileAttached(0);
+            }
+        }
+
+        // 추가한 파일이 있는 경우
+        if (boardUpdateDto.getNewFiles() != null && !boardUpdateDto.getNewFiles().isEmpty()) {
+            updatedBoard.setFileAttached(1);
+            for (MultipartFile newFile : boardUpdateDto.getNewFiles()) {
+                String originalFileName = newFile.getOriginalFilename();
+                String storedFileName = System.currentTimeMillis() + " " + originalFileName;
+                String savePath = "/Users/handongwoo/communityFile/" + storedFileName;
+                newFile.transferTo(new File(savePath));
+
+                BoardFile savedboardFile = BoardFile.toBoardFile(updatedBoard, originalFileName, storedFileName);
+                boardFileRepository.save(savedboardFile);
+            }
+        }
+
         boardRepository.save(updatedBoard);
 
         return BoardDto.toDto(updatedBoard);
