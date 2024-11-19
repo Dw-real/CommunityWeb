@@ -15,21 +15,77 @@
 
 <!-- 게시글 수정 폼 -->
 <form id="updateForm" enctype="multipart/form-data">
-  <label for="boardFile" class="custom-file-label"></label>
-  <input type="file" id="boardFile" class="custom-file-input" multiple hidden><br>
-  <input type="text" id="boardTitle" name="boardTitle"  th:value="${boardUpdate.boardTitle}" required /><br><br>
-  <textarea id="boardContent" name="boardContent" rows="10" cols="50" th:text="${boardUpdate.boardContents}" required></textarea><br><br>
+
+  <div class="form-row">
+    <label for="newFile" class="custom-file-label"></label>
+    <input type="file" id="newFile" class="custom-file-input" multiple hidden>
+    <button type="submit" id="submitBtn">수정하기</button>
+  </div>
+
+  <div class="form-row">
+    <input type="text" id="boardTitle" name="boardTitle"  th:value="${boardUpdate.boardTitle}" required />
+  </div>
+
+  <div class="form-row">
+    <textarea id="boardContent" name="boardContent" rows="10" cols="50" th:text="${boardUpdate.boardContents}" required></textarea>
+  </div>
+
   <ul id="fileList">
     <li th:each="file, iterStat : ${boardUpdate.storedFileName}">
       <span th:text="${file}"></span>
-      <button type="button" class="deleteFileButton">삭제</button>
+      <button type="button" class="deleteFileButton"></button>
     </li>
   </ul>
-  <button type="submit">수정하기</button>
+
+  <ul id="newFileList">
+    <li>
+      <span></span>
+      <button type="button" class="deleteFileButton" hidden></button>
+    </li>
+  </ul>
+
 </form>
 
 <script>
   $(document).ready(function() {
+      var selectedFiles = [];
+
+      $('#newFile').change(function(event) {
+        var files = event.target.files;
+        var fileList = $('#newFileList');
+
+        for (var i = 0; i < files.length; i++) {
+          var fileName = files[i].name;
+          selectedFiles.push(files[i]);
+          var listItem = $('<li></li>');
+          var fileText = $('<span></span>').text(fileName);
+          var deleteButton = $('<button type="button" class="deleteFileButton"></button>');
+
+          deleteButton.click(function() {
+            var index = $(this).parent().index() - 1;
+            $(this).parent().remove();
+            deleteFile(index);
+          });
+
+          listItem.append(fileText).append(deleteButton);
+          fileList.append(listItem);
+        }
+      });
+
+      function deleteFile(index) {
+        selectedFiles.splice(index, 1);
+        var files = $('#newFile')[0].files;
+        var fileList = new DataTransfer();
+
+        for (var i = 0; i < files.length; i++) {
+          if (i !== index) {
+            fileList.items.add(files[i]);
+          }
+        }
+
+        $('#newFile')[0].files = fileList.files;
+      }
+
       let removedFiles = [];
 
       $('.deleteFileButton').click(function() {
@@ -57,9 +113,8 @@
           formData.append("userCode", userCode);
           formData.append("boardHits", boardHits);
 
-          const newFiles = $('#newFile')[0].files;
-          for (let i = 0; i < newFiles.length; i++) {
-              formData.append("newFiles", newFiles[i]);
+          for (var i = 0; i<selectedFiles.length; i++) {
+              formData.append("newFiles", selectedFiles[i]);
           }
 
           removedFiles.forEach(file => {

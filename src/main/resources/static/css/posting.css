@@ -1,3 +1,11 @@
+.form-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
 form {
     background-color: white;
     padding: 20px;
@@ -5,7 +13,6 @@ form {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 600px;
     margin: 0 auto;
-    text-align: right;
 }
 
 label {
@@ -39,7 +46,7 @@ input[type="submit"] {
     width: 20%;
 }
 
-button {
+#submitBtn {
     background-color: #0073e6;
     color: white;
     font-size: 16px;
@@ -48,6 +55,42 @@ button {
     border-radius: 4px;
     cursor: pointer;
     width: 20%;
+}
+
+#fileList, #newFileList {
+  list-style: none;
+  padding: 0;
+}
+
+#fileList li, #newFileList li {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#fileList span, #newFileList span {
+  flex: 1;
+  display: inline-block;
+  font-size: 16px;
+}
+
+/* 삭제 버튼 스타일 */
+.deleteFileButton {
+    width: 24px;
+    height: 24px;
+    background-image: url('/image/deleteImg.png');
+    background-color: #fffff;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.deleteFileButton:hover {
+    opacity: 0.8;
 }
 
 .custom-file-label {

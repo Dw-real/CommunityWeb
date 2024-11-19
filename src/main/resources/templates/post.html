@@ -12,15 +12,68 @@
 <body>
 <h1>게시글 작성</h1>
 <form id="postForm" enctype="multipart/form-data">
-  <label for="boardFile" class="custom-file-label"></label>
-  <input type="file" id="boardFile" class="custom-file-input" multiple hidden><br>
-  <input type="text" id="boardTitle"> <br>
-  <textarea id="boardContents" cols="50" rows="10"></textarea> <br>
-  <input type = "submit" value="작성 완료">
+  <div class="form-row">
+    <label for="boardFile" class="custom-file-label"></label>
+    <input type="file" id="boardFile" class="custom-file-input" multiple hidden>
+    <input type="submit" value="작성 완료">
+  </div>
+
+  <div class="form-row">
+    <input type="text" id="boardTitle" placeholder="제목을 입력하세요">
+  </div>
+
+  <div class="form-row">
+    <textarea id="boardContents" cols="50" rows="10" placeholder="내용을 입력하세요"></textarea>
+  </div>
+
+  <ul id="fileList">
+    <li>
+      <span></span>
+      <button type="button" class="deleteFileButton" hidden></button>
+    </li>
+  </ul>
 </form>
 
 <script>
   $(document).ready(function() {
+    var selectedFiles = [];
+
+    $('#boardFile').change(function(event) {
+      var files = event.target.files;
+      var fileList = $('#fileList');
+
+      for (var i = 0; i < files.length; i++) {
+        var fileName = files[i].name;
+        selectedFiles.push(files[i]);
+        var listItem = $('<li></li>');
+        var fileText = $('<span></span>').text(fileName);
+        var deleteButton = $('<button type="button" class="deleteFileButton"></button>');
+
+        deleteButton.click(function() {
+          var index = $(this).parent().index() - 1;
+          $(this).parent().remove();
+          deleteFile(index);
+        });
+
+        listItem.append(fileText).append(deleteButton);
+        fileList.append(listItem);
+      }
+    });
+
+    function deleteFile(index) {
+      selectedFiles.splice(index, 1);
+      var files = $('#boardFile')[0].files;
+      var fileList = new DataTransfer();
+
+      for (var i = 0; i < files.length; i++) {
+        if (i !== index) {
+          fileList.items.add(files[i]);
+        }
+      }
+
+      $('#boardFile')[0].files = fileList.files;
+    }
+
     $('#postForm').submit(function(event) {
       event.preventDefault();
 
@@ -31,15 +84,11 @@
       var header = $("meta[name='_csrf_header']").attr('content');
       var token = $("meta[name='_csrf']").attr('content');
 
-      // 파일 첨부 여부 확인
       var formData = new FormData();
       var boardFile = $('#boardFile')[0].files;
 
-      // formData에 파일 추가
-      if (boardFile.length > 0) {
-        for (var i = 0; i < boardFile.length; i++) {
-            formData.append("boardFile", boardFile[i]);
-        }
+      for (var i = 0; i<selectedFiles.length; i++) {
+        formData.append("boardFile", selectedFiles[i]);
       }
 
       formData.append("boardTitle", boardTitle);
@@ -59,11 +108,12 @@
               window.location.href = '/';
           },
           error: function(xhr, status, error) {
-              // 오류가 발생하면 메시지 표시
+              // 오류가 발생하면 처리
           }
       });
     });
   });
 </script>
+
 </body>
 </html>
