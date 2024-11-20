@@ -1,7 +1,7 @@
 package com.dw.communityWeb.presentation.controller;
 
 import com.dw.communityWeb.application.UserService;
-import com.dw.communityWeb.domain.User;
+import com.dw.communityWeb.domain.user.User;
 import com.dw.communityWeb.presentation.dto.login.PwdUpdateDto;
 import com.dw.communityWeb.presentation.dto.user.UserDto;
 import com.dw.communityWeb.presentation.dto.user.UserIdRequestDto;

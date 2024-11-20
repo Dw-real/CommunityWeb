@@ -1,5 +1,7 @@
-package com.dw.communityWeb.domain;
+package com.dw.communityWeb.domain.board;
 
+import com.dw.communityWeb.domain.Base;
+import com.dw.communityWeb.domain.user.User;
 import com.dw.communityWeb.presentation.dto.board.BoardUpdateDto;
 import com.dw.communityWeb.presentation.dto.board.BoardDto;
 import jakarta.persistence.*;
@@ -17,6 +19,10 @@ public class Board extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
     private Long id;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Type boardType;
 
     @Column
     private String boardWriter;
@@ -44,6 +50,7 @@ public class Board extends Base {
 
     public static Board toEntity(BoardDto boardDto, User user) {
         Board board = new Board();
+        board.setBoardType(boardDto.getBoardType());
         board.setBoardWriter(user.getId());
         board.setBoardTitle(boardDto.getBoardTitle());
         board.setBoardContents(boardDto.getBoardContents());
@@ -56,6 +63,7 @@ public class Board extends Base {
 
     public static Board toFileEntity(BoardDto boardDto, User user) {
         Board board = new Board();
+        board.setBoardType(boardDto.getBoardType());
         board.setBoardWriter(user.getId());
         board.setBoardTitle(boardDto.getBoardTitle());
         board.setBoardContents(boardDto.getBoardContents());
@@ -69,6 +77,7 @@ public class Board extends Base {
     public static Board updateEntity(BoardUpdateDto boardUpdateDto, User user) {
         Board board = new Board();
         board.setId(boardUpdateDto.getUserCode());
+        board.setBoardType(boardUpdateDto.getBoardType());
         board.setBoardWriter(user.getId());
         board.setBoardTitle(boardUpdateDto.getBoardTitle());
         board.setBoardContents(boardUpdateDto.getBoardContents());

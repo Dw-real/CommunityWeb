@@ -1,14 +1,11 @@
-package com.dw.communityWeb.domain;
+package com.dw.communityWeb.domain.user;
 
+import com.dw.communityWeb.domain.board.Board;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Entity

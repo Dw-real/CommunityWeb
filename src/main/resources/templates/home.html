@@ -29,14 +29,17 @@
 <!-- 게시글 목록 -->
 <table>
     <tr>
-        <th>No.</th>
+        <th>게시판</th>
         <th>제목</th>
         <th>작성자</th>
         <th>작성일</th>
         <th>조회수</th>
     </tr>
     <tr th:each="board : ${boardList}">
-        <td th:text="${board.id}"></td>
+        <td>
+            <span th:if="${board.boardType.name() == 'FREE'}" th:text="'자유게시판'"></span>
+            <span th:if="${board.boardType.name() == 'QNA'}" th:text="'QNA게시판'"></span>
+        </td>
         <td id="boardTitle"><a th:href="@{|/community/${board.id}|(page=${boardList.number + 1})}" th:text="${board.boardTitle}"></a></td>
         <td th:text="${board.boardWriter}"></td>
         <td th:text="*{#temporals.format(board.boardCreatedTime, 'yyyy-MM-dd HH:mm')}"></td>

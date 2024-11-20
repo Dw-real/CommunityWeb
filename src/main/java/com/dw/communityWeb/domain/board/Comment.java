@@ -1,5 +1,7 @@
-package com.dw.communityWeb.domain;
+package com.dw.communityWeb.domain.board;
 
+import com.dw.communityWeb.domain.Base;
+import com.dw.communityWeb.domain.user.User;
 import com.dw.communityWeb.presentation.dto.comment.CommentDto;
 import jakarta.persistence.*;
 import lombok.Getter;

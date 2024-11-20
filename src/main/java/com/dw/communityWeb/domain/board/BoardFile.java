@@ -1,5 +1,6 @@
-package com.dw.communityWeb.domain;
+package com.dw.communityWeb.domain.board;
 
+import com.dw.communityWeb.domain.Base;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

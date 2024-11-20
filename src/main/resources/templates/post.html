@@ -13,6 +13,11 @@
 <h1>게시글 작성</h1>
 <form id="postForm" enctype="multipart/form-data">
   <div class="form-row">
+    <label for="boardType">게시판 선택: </label>
+    <select id="boardType" name="boardType">
+      <option value="FREE">자유게시판</option>
+      <option value="QNA">QNA게시판</option>
+    </select>
     <label for="boardFile" class="custom-file-label"></label>
     <input type="file" id="boardFile" class="custom-file-input" multiple hidden>
     <input type="submit" value="작성 완료">
@@ -77,9 +82,12 @@
     $('#postForm').submit(function(event) {
       event.preventDefault();
 
-      var boardTitle = $('#boardTitle').val();
-      var boardContents = $('#boardContents').val();
-      var userCode = [[${user.userCode}]];
+      const boardType = $('#boardType').val();
+      const boardTitle = $('#boardTitle').val();
+      const boardContents = $('#boardContents').val();
+      const userCode = [[${user.userCode}]];
+
+      console.log(boardType);
 
       var header = $("meta[name='_csrf_header']").attr('content');
       var token = $("meta[name='_csrf']").attr('content');
@@ -91,6 +99,7 @@
         formData.append("boardFile", selectedFiles[i]);
       }
 
+      formData.append("boardType", boardType);
       formData.append("boardTitle", boardTitle);
       formData.append("boardContents", boardContents);
       formData.append("userCode", userCode);

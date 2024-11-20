@@ -1,11 +1,11 @@
 package com.dw.communityWeb.presentation.dto.board;
 
-import com.dw.communityWeb.domain.Board;
-import com.dw.communityWeb.domain.BoardFile;
+import com.dw.communityWeb.domain.board.Board;
+import com.dw.communityWeb.domain.board.BoardFile;
+import com.dw.communityWeb.domain.board.Type;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor // 모든 필드를 매개변수로 하는 생성자
 public class BoardDto {
     private Long id;
+    private Type boardType;
     private String boardWriter;
     private String boardTitle;
     private String boardContents;
@@ -30,9 +31,10 @@ public class BoardDto {
     private List<String> storedFileName; // 서버 저장용 파일 이름
     private int fileAttached;
 
-    public BoardDto(Long id, String boardWriter, String boardTitle, int boardHits,
+    public BoardDto(Long id, Type boardType, String boardWriter, String boardTitle, int boardHits,
                     LocalDateTime boardCreatedTime) {
         this.id = id;
+        this.boardType = boardType;
         this.boardWriter = boardWriter;
         this.boardTitle = boardTitle;
         this.boardHits = boardHits;
@@ -42,6 +44,7 @@ public class BoardDto {
     public static BoardDto toDto(Board board) {
         BoardDto boardDto = new BoardDto();
         boardDto.setId(board.getId());
+        boardDto.setBoardType(board.getBoardType());
         boardDto.setBoardWriter(board.getBoardWriter());
         boardDto.setBoardTitle(board.getBoardTitle());
         boardDto.setBoardContents(board.getBoardContents());

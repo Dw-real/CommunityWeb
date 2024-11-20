@@ -1,6 +1,6 @@
 package com.dw.communityWeb.application;
 
-import com.dw.communityWeb.domain.User;
+import com.dw.communityWeb.domain.user.User;
 import com.dw.communityWeb.infrastructure.UserRepository;
 import com.dw.communityWeb.presentation.dto.login.PwdUpdateDto;
 import com.dw.communityWeb.presentation.dto.user.UserDto;

@@ -1,6 +1,6 @@
 package com.dw.communityWeb.infrastructure;
 
-import com.dw.communityWeb.domain.Board;
+import com.dw.communityWeb.domain.board.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

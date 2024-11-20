@@ -17,6 +17,11 @@
 <form id="updateForm" enctype="multipart/form-data">
 
   <div class="form-row">
+    <label for="boardType">게시판 선택: </label>
+    <select id="boardType" name="boardType">
+      <option value="FREE">자유게시판</option>
+      <option value="QNA">QNA게시판</option>
+    </select>
     <label for="newFile" class="custom-file-label"></label>
     <input type="file" id="newFile" class="custom-file-input" multiple hidden>
     <button type="submit" id="submitBtn">수정하기</button>
@@ -98,6 +103,7 @@
           e.preventDefault();
 
           const boardId = [[${boardUpdate.id}]];
+          const boardType = $('#boardType').val();
           const boardTitle = $('#boardTitle').val();
           const boardContent = $('#boardContent').val();
           const userCode = [[${boardUpdate.userCode}]];
@@ -108,6 +114,7 @@
 
           const formData = new FormData();
           formData.append("boardId", boardId);
+          formData.append("boardType", boardType);
           formData.append("boardTitle", boardTitle);
           formData.append("boardContents", boardContent);
           formData.append("userCode", userCode);

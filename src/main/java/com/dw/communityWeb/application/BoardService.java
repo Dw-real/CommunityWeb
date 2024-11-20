@@ -1,8 +1,8 @@
 package com.dw.communityWeb.application;
 
-import com.dw.communityWeb.domain.Board;
-import com.dw.communityWeb.domain.BoardFile;
-import com.dw.communityWeb.domain.User;
+import com.dw.communityWeb.domain.board.Board;
+import com.dw.communityWeb.domain.board.BoardFile;
+import com.dw.communityWeb.domain.user.User;
 import com.dw.communityWeb.infrastructure.BoardFileRepository;
 import com.dw.communityWeb.infrastructure.BoardRepository;
 import com.dw.communityWeb.infrastructure.UserRepository;
@@ -78,7 +78,7 @@ public class BoardService {
         Page<Board> boardEntities =
                 boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
 
-        Page<BoardDto> boardDtos = boardEntities.map(board -> new BoardDto(board.getId(), board.getBoardWriter(), board.getBoardTitle(),
+        Page<BoardDto> boardDtos = boardEntities.map(board -> new BoardDto(board.getId(), board.getBoardType(), board.getBoardWriter(), board.getBoardTitle(),
                 board.getBoardHits(), board.getCreatedTime()));
 
         return boardDtos;

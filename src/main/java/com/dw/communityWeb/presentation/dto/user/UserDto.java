@@ -1,6 +1,6 @@
 package com.dw.communityWeb.presentation.dto.user;
 
-import com.dw.communityWeb.domain.User;
+import com.dw.communityWeb.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

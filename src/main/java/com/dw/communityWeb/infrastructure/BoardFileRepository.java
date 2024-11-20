@@ -1,6 +1,6 @@
 package com.dw.communityWeb.infrastructure;
 
-import com.dw.communityWeb.domain.BoardFile;
+import com.dw.communityWeb.domain.board.BoardFile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,12 +1,11 @@
 package com.dw.communityWeb.presentation.dto.comment;
 
-import com.dw.communityWeb.domain.Comment;
+import com.dw.communityWeb.domain.board.Comment;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 @Getter

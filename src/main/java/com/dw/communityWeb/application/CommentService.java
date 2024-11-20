@@ -1,8 +1,8 @@
 package com.dw.communityWeb.application;
 
-import com.dw.communityWeb.domain.Board;
-import com.dw.communityWeb.domain.Comment;
-import com.dw.communityWeb.domain.User;
+import com.dw.communityWeb.domain.board.Board;
+import com.dw.communityWeb.domain.board.Comment;
+import com.dw.communityWeb.domain.user.User;
 import com.dw.communityWeb.infrastructure.BoardRepository;
 import com.dw.communityWeb.infrastructure.CommentRepository;
 import com.dw.communityWeb.infrastructure.UserRepository;

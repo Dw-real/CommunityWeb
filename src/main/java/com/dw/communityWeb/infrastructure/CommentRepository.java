@@ -1,7 +1,7 @@
 package com.dw.communityWeb.infrastructure;
 
-import com.dw.communityWeb.domain.Board;
-import com.dw.communityWeb.domain.Comment;
+import com.dw.communityWeb.domain.board.Board;
+import com.dw.communityWeb.domain.board.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
