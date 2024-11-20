@@ -58,7 +58,7 @@
     </span>
 
     <a th:href="${boardList.last} ? '#' : @{/(page=${boardList.number + 2})}"> > </a>
-    <a th:href="@{/(page=${boardList.totalPages})}"> >> </a>
+    <a th:href="@{/(page=${boardList.totalPages > 0 ? boardList.totalPages : 1})}"> >> </a>
 </div>
 
 <button id="postBtn" onclick="posting()">글 쓰기</button>
