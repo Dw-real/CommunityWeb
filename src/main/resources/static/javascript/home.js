@@ -14,6 +14,20 @@ document.getElementById("findPwd").addEventListener('click', function() {
     location.href = "/user/findPwd";
 });
 
+document.getElementById('userId').addEventListener('click', function() {
+    document.getElementById('dialog-overlay').style.display = document.getElementById('dialog-overlay').style.display === "block" ? "none" : "block";
+    document.getElementById('userIdDialog').style.display = document.getElementById('userIdDialog').style.display === "block" ? "none" : "block";
+});
+
+document.getElementById('dialog-overlay').addEventListener('click', function() {
+    document.getElementById('dialog-overlay').style.display = 'none';
+    document.getElementById('userIdDialog').style.display = 'none';
+});
+
+document.getElementById('viewPosts').addEventListener('click', function() {
+
+});
+
 document.getElementById("updatePwd").addEventListener('click', function() {
     location.href = "/user/updatePwd";
 });
@@ -25,7 +39,7 @@ function toggleDisplay(loggedIn, userId) {
         document.getElementById('findId').style.display = 'none';
         document.getElementById('findPwd').style.display = 'none';
         document.getElementById('userId').style.display = 'inline';
-        document.getElementById('userId').textContent = userId;
+        document.getElementById('userId').textContent = userId + "님";
         document.getElementById('updatePwd').style.display = 'inline';
         document.getElementById('logout').style.display = 'inline';
         document.getElementById('postBtn').style.display = 'inline';

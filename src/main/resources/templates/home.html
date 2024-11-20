@@ -12,11 +12,10 @@
 <h1>게시판</h1>
 <div class="top-right-links">
     <span id="create">회원 가입</span>
-    <span id="userId" style="display:none;"></span>
+    <span id="userId" style="display:none;">내 정보</span>
     <span id="login">로그인</span>
     <span id="logout" style="display:none;">로그아웃</span>
     <span id="findId">아이디 찾기</span>
-    <span id="updatePwd" style="display:none;">비밀번호 변경</span>
     <span id="findPwd">비밀번호 찾기</span>
 </div>
 
@@ -62,6 +61,15 @@
 </div>
 
 <button id="postBtn" onclick="posting()">글 쓰기</button>
+
+<div class="dialog-overlay" id="dialog-overlay"></div>
+
+<div class="dialog" id="userIdDialog">
+    <ul>
+        <li id="viewPosts">내 글 보기</li>
+        <li id="updatePwd">비밀번호 변경</li>
+    </ul>
+</div>
 
 <script>
     window.onload = function() {
