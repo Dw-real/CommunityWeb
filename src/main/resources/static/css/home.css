@@ -17,30 +17,35 @@
 
 /* 게시판 목록 */
 .board-list {
+    display: flex;
     width:100%;
     margin-top: 50px;
-    display: flex;
-    justify-content:center;
-    border: 1px solid black;
+    justify-content: center;
+    border: 0.5px solid darkgray;
     border-left: none;
     border-right: none;
 }
 
-.board-list span {
-    margin: auto;
+.board-item {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
     cursor: pointer;
     font-size: 20px;
     font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
-.board-list span:hover {
-    text-decoration: underline;
+.board-item.active {
+    background-color: lightblue;
+    color: white;
 }
+
 
 /* 게시글 목록 */
 table {
     width: 100%; /* 테이블 크기 자동 조정 */
-    margin-top: 50px;
+    margin-top: 90px;
     border-collapse: collapse;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

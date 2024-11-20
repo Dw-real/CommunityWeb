@@ -18,10 +18,6 @@ document.getElementById("updatePwd").addEventListener('click', function() {
     location.href = "/user/updatePwd";
 });
 
-document.getElementById("allBoard").addEventListener('click', function() {
-    location.href = "/";
-});
-
 function toggleDisplay(loggedIn, userId) {
     if (loggedIn) { // 로그인 성공
         document.getElementById('create').style.display = 'none';
@@ -61,6 +57,18 @@ $(document).ready(function() {
             error: function() {
                 alert('로그아웃 중 오류가 발생했습니다.');
             }
+        });
+    });
+
+    const items = document.querySelectorAll('.board-item');
+
+    items.forEach(item => {
+        item.addEventListener('click', () => {
+            event.preventDefault();
+
+            items.forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+
         });
     });
 });
