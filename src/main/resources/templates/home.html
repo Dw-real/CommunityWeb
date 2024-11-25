@@ -41,32 +41,12 @@
     <tbody>
 
     </tbody>
-<!--    <tr th:each="board : ${boardList}">-->
-<!--        <td>-->
-<!--            <span th:if="${board.boardType.name() == 'FREE'}" th:text="'자유게시판'"></span>-->
-<!--            <span th:if="${board.boardType.name() == 'QNA'}" th:text="'QNA게시판'"></span>-->
-<!--        </td>-->
-<!--        <td id="boardTitle"><a th:href="@{|/community/${board.id}|(page=${boardList.number + 1})}" th:text="${board.boardTitle}"></a></td>-->
-<!--        <td th:text="${board.boardWriter}"></td>-->
-<!--        <td th:text="*{#temporals.format(board.boardCreatedTime, 'yyyy-MM-dd HH:mm')}"></td>-->
-<!--        <td th:text="${board.boardHits}"></td>-->
-<!--    </tr>-->
+
 </table>
 
 <!-- 페이지 네비게이션 -->
 <div class="pagination">
-<!--    <a th:href="@{/(page=1)}"> << </a>-->
-<!--    <a th:href="${boardList.first} ? '#' : @{/(page=${boardList.number})}"> < </a>-->
 
-<!--    <span th:each="page : ${#numbers.sequence(startPage, endPage)}">-->
-<!--        <span th:if="${page == boardList.number + 1}" th:text="${page}" class="current-page"></span>-->
-<!--        <span th:unless="${page == boardList.number + 1}">-->
-<!--            <a th:href="@{/(page=${page})}" th:text="${page}"></a>-->
-<!--        </span>-->
-<!--    </span>-->
-
-<!--    <a th:href="${boardList.last} ? '#' : @{/(page=${boardList.number + 2})}"> > </a>-->
-<!--    <a th:href="@{/(page=${boardList.totalPages > 0 ? boardList.totalPages : 1})}"> >> </a>-->
 </div>
 
 <button id="postBtn" onclick="posting()">글 쓰기</button>
