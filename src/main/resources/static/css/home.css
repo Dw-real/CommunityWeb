@@ -58,12 +58,6 @@ table th {
     background-color: #ff2f2;
 }
 
-#boardTitle, #boardTitle a {
-    text-align: left;
-    text-decoration: none;
-    color: black;
-}
-
 table td a:hover {
     text-decoration: underline;
 }

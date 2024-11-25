@@ -8,6 +8,7 @@ import com.dw.communityWeb.presentation.dto.comment.CommentDto;
 import com.dw.communityWeb.presentation.dto.user.UserDto;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,16 @@ public class BoardController {
     public BoardController(BoardService boardService, CommentService commentService) {
         this.boardService = boardService;
         this.commentService = commentService;
+    }
+
+    @GetMapping("/board/{type}")
+    public ResponseEntity<?> getBoardList(
+            @PathVariable String type,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Page<BoardDto> boardList = boardService.paging(type, page, size);
+        return ResponseEntity.ok(boardList);
     }
 
     @GetMapping("/post")

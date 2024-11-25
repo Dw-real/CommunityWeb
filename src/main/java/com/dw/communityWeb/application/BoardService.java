@@ -2,6 +2,7 @@ package com.dw.communityWeb.application;
 
 import com.dw.communityWeb.domain.board.Board;
 import com.dw.communityWeb.domain.board.BoardFile;
+import com.dw.communityWeb.domain.board.Type;
 import com.dw.communityWeb.domain.user.User;
 import com.dw.communityWeb.infrastructure.BoardFileRepository;
 import com.dw.communityWeb.infrastructure.BoardRepository;
@@ -71,13 +72,18 @@ public class BoardService {
         }
     }
 
-    public Page<BoardDto> paging(Pageable pageable) {
-        int page = pageable.getPageNumber() - 1;
-        int pageLimit = 10; // 한 페이지에 보여줄 글 개수
-
-        Page<Board> boardEntities =
-                boardRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
-
+    public Page<BoardDto> paging(String type, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Board> boardEntities = null;
+        
+        if ("allBoard".equals(type)) {
+            boardEntities = boardRepository.findAll(pageable);
+        } else if ("freeBoard".equals(type)) {
+            boardEntities = boardRepository.findByBoardType(Type.FREE, pageable);
+        } else {
+            boardEntities = boardRepository.findByBoardType(Type.QNA, pageable);
+        }
+        
         Page<BoardDto> boardDtos = boardEntities.map(board -> new BoardDto(board.getId(), board.getBoardType(), board.getBoardWriter(), board.getBoardTitle(),
                 board.getBoardHits(), board.getCreatedTime()));
 
