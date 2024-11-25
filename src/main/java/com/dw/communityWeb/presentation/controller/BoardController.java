@@ -37,11 +37,27 @@ public class BoardController {
     @GetMapping("/board/{type}")
     public ResponseEntity<?> getBoardList(
             @PathVariable String type,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "0") int page
     ) {
-        Page<BoardDto> boardList = boardService.paging(type, page, size);
+        Page<BoardDto> boardList = boardService.paging(type, page, 10);
         return ResponseEntity.ok(boardList);
+    }
+
+    @GetMapping("/viewMyPosts")
+    public String viewMyPosts(HttpSession session, @PageableDefault(page = 1) Pageable pageable, Model model) {
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
+
+        if (loggedInUser != null) {
+            Page<BoardDto> boardList = boardService.getMyPosts(loggedInUser.getUserCode(), pageable);
+            int blockLimit = 10;
+            int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
+            int endPage = (boardList.getTotalPages() == 0) ? 1 : Math.min((startPage + blockLimit - 1), boardList.getTotalPages());
+            model.addAttribute("boardList", boardList);
+            model.addAttribute("startPage", startPage);
+            model.addAttribute("endPage", endPage);
+        }
+
+        return "viewMyPosts";
     }
 
     @GetMapping("/post")

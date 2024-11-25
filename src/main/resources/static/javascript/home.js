@@ -25,7 +25,7 @@ document.getElementById('dialog-overlay').addEventListener('click', function() {
 });
 
 document.getElementById('viewPosts').addEventListener('click', function() {
-
+    location.href = "/community/viewMyPosts";
 });
 
 document.getElementById("updatePwd").addEventListener('click', function() {
@@ -90,10 +90,10 @@ function loadBoardList(type, page) {
     $.ajax({
         url: `/community/board/${type}`,
         type: 'GET',
-        data: {page: page, size: 10},
+        data: {page: page},
         success: function(data) {
             renderBoardList(data.content);
-            renderPagination(data);
+            renderPagination(data, type);
         },
         error: function(error) {
 
@@ -108,7 +108,7 @@ function loadBoardList(type, page) {
             data: { page: page, size: 10 },
             success: function (data) {
                 renderBoardList(data.content);
-                renderPagination(data);
+                renderPagination(data, type);
             },
             error: function (error) {
                 console.error("Error loading board list:", error);
@@ -142,29 +142,30 @@ function renderBoardList(boardList) {
     });
 }
 
-function renderPagination(data) {
+function renderPagination(data, type) {
     let pagination = $(".pagination");
     pagination.empty(); // 기존 페이지네이션 제거
 
+    console.log(type);
     let startPage = data.number - 2 > 0 ? data.number - 2 : 1;
     let endPage = startPage + 4 < data.totalPages ? startPage + 4 : data.totalPages;
 
     let navHtml = `
-        <a href="#" onclick="loadBoardList('${data.boardType}', 0)"><<</a>
-        <a href="#" onclick="loadBoardList('${data.boardType}', ${data.number - 1})"><</a>
+        <a href="#" onclick="loadBoardList('${type}', 0)"><<</a>
+        <a href="#" onclick="loadBoardList('${type}', ${data.number - 1 < 0 ? 0 : data.number - 1})"><</a>
     `;
 
     for (let i = startPage; i <= endPage; i++) {
         if (i === data.number + 1) {
             navHtml += `<span class="current-page">${i}</span>`;
         } else {
-            navHtml += `<a href="#" onclick="loadBoardList('${data.boardType}', ${i - 1})">${i}</a>`;
+            navHtml += `<a href="#" onclick="loadBoardList('${type}', ${i - 1})">${i}</a>`;
         }
     }
 
     navHtml += `
-        <a href="#" onclick="loadBoardList('${data.boardType}', ${data.number + 1})">></a>
-        <a href="#" onclick="loadBoardList('${data.boardType}', ${data.totalPages - 1})">>></a>
+        <a href="#" onclick="loadBoardList('${type}', ${data.number + 1})">></a>
+        <a href="#" onclick="loadBoardList('${type}', ${data.totalPages - 1})">>></a>
     `;
 
     pagination.html(navHtml);

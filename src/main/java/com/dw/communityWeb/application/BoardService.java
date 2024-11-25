@@ -90,6 +90,7 @@ public class BoardService {
         return boardDtos;
     }
 
+
     @Transactional
     public void updateHits(Long id) {
         boardRepository.updateHits(id);
@@ -152,5 +153,16 @@ public class BoardService {
 
     public void delete(Long id) {
         boardRepository.deleteById(id);
+    }
+
+    public Page<BoardDto> getMyPosts(Long userCode, Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;
+        Pageable pageAble = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Board> boardEntities = boardRepository.findByUser_UserCode(userCode, pageAble);
+
+        Page<BoardDto> boardDtos = boardEntities.map(board -> new BoardDto(board.getId(), board.getBoardType(), board.getBoardWriter(), board.getBoardTitle(),
+                board.getBoardHits(), board.getCreatedTime()));
+
+        return boardDtos;
     }
 }
