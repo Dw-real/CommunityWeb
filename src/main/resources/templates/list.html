@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<h1>게시판</h1>
+<div class="top-right-links">
+    <span id="create">회원 가입</span>
+    <span id="userId" style="display:none;"></span>
+    <span id="login">로그인</span>
+    <span id="logout" style="display:none;">로그아웃</span>
+    <span id="findId">아이디 찾기</span>
+    <span id="findPwd">비밀번호 찾기</span>
+</div>
+
+<!--게시판 목록-->
+<div class="board-list">
+    <span id="allBoard" class="board-item">전체</span>
+    <span id="freeBoard" class="board-item">자유게시판</span>
+    <span id="qnaBoard" class="board-item">Q&A게시판</span>
+</div>
+
+<button id="postBtn" onclick="posting()">글 쓰기</button>
+
+<!-- 게시글 목록 출력 -->
+<table>
+    <thead>
+    <tr>
+        <th>게시판</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>작성일</th>
+        <th>조회수</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="board : ${boardList}">
+        <td>
+            <span th:if="${board.boardType.name() == 'FREE'}" th:text="'자유게시판'"></span>
+            <span th:if="${board.boardType.name() == 'QNA'}" th:text="'QNA게시판'"></span>
+        </td>
+        <td id="boardTitle" style="text-align: left;"><a th:href="@{|/community/${boardType}/${board.id}|(page=${boardList.number + 1})}" th:text="${board.boardTitle}" style="color: inherit; text-decoration: none;"></a></td>
+        <td th:text="${board.boardWriter}"></td>
+        <td th:text="*{#temporals.format(board.boardCreatedTime, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${board.boardHits}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 페이지 네비게이션 -->
+<div class="pagination">
+    <a th:href="@{/(page=1)}"> << </a>
+    <a th:href="${boardList.first} ? '#' : @{/(page=${boardList.number})}"> < </a>
+    <span th:each="page : ${#numbers.sequence(startPage, endPage)}">
+          <span th:if="${page == boardList.number + 1}" th:text="${page}" class="current-page"></span>
+          <span th:unless="${page == boardList.number + 1}">
+              <a th:href="@{/(page=${page})}" th:text="${page}"></a>
+          </span>
+      </span>
+
+    <a th:href="${boardList.last} ? '#' : @{/(page=${boardList.number + 2})}"> > </a>
+    <a th:href="@{/(page=${boardList.totalPages > 0 ? boardList.totalPages : 1})}"> >> </a>
+</div>
+
+
+<div class="dialog-overlay" id="dialog-overlay"></div>
+
+<div class="dialog" id="userIdDialog">
+    <ul>
+        <li id="viewPosts">내 글 보기</li>
+        <li id="updatePwd">비밀번호 변경</li>
+    </ul>
+</div>
+
+<script>
+    window.onload = function() {
+        var loggedIn = [[${loggedIn}]];
+        var userId = "[[${userId}]]";
+        var type = "[[${boardType}]]";
+        toggleDisplay(loggedIn, userId, type);
+    };
+</script>
+
+<script src="/javascript/home.js"></script>
+</body>
+</html>

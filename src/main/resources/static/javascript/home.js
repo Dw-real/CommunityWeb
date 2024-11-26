@@ -32,7 +32,7 @@ document.getElementById("updatePwd").addEventListener('click', function() {
     location.href = "/user/updatePwd";
 });
 
-function toggleDisplay(loggedIn, userId) {
+function toggleDisplay(loggedIn, userId, type) {
     if (loggedIn) { // 로그인 성공
         document.getElementById('create').style.display = 'none';
         document.getElementById('login').style.display = 'none';
@@ -53,6 +53,9 @@ function toggleDisplay(loggedIn, userId) {
         document.getElementById('logout').style.display = 'none';
         document.getElementById('postBtn').style.display = 'none';
     }
+
+    document.getElementById(type).style.backgroundColor = 'lightblue';
+    document.getElementById(type).style.color = 'white';
 }
 
 function posting() {
@@ -81,92 +84,11 @@ $(document).ready(function() {
             event.preventDefault();
             items.forEach(i => i.classList.remove('active'));
             item.classList.add('active');
-            loadBoardList(item.id, 0);
+            loadBoardList(item.id);
         });
     });
 });
 
-function loadBoardList(type, page) {
-    $.ajax({
-        url: `/community/board/${type}`,
-        type: 'GET',
-        data: {page: page},
-        success: function(data) {
-            renderBoardList(data.content);
-            renderPagination(data, type);
-        },
-        error: function(error) {
-
-        }
-    });
-}
-
-function loadBoardList(type, page) {
-        $.ajax({
-            url: `/community/board/${type}`,
-            type: "GET",
-            data: { page: page, size: 10 },
-            success: function (data) {
-                renderBoardList(data.content);
-                renderPagination(data, type);
-            },
-            error: function (error) {
-                console.error("Error loading board list:", error);
-            }
-        });
-    }
-
-function renderBoardList(boardList) {
-    let tableBody = $("table tbody");
-    tableBody.empty();
-
-    boardList.forEach(board => {
-       let date = new Date(board.boardCreatedTime);
-       let formattedDate = date.getFullYear() + '-' +
-                           String(date.getMonth() + 1).padStart(2, '0') + '-' +
-                           String(date.getDate()).padStart(2, '0') + ' ' +
-                           String(date.getHours()).padStart(2, '0') + ':' +
-                           String(date.getMinutes()).padStart(2, '0');
-
-        let boardRow = `
-            <tr>
-                <td>${board.boardType === 'FREE' ? '자유게시판' : 'Q&A게시판'}</td>
-                <td style="text-align: left;"><a href="/community/${board.id}?page=${board.page}" style="color: inherit; text-decoration: none;">
-                                                  ${board.boardTitle}</a></td>
-                <td>${board.boardWriter}</td>
-                <td>${formattedDate}</td>
-                <td>${board.boardHits}</td>
-            </tr>
-        `;
-        tableBody.append(boardRow);
-    });
-}
-
-function renderPagination(data, type) {
-    let pagination = $(".pagination");
-    pagination.empty(); // 기존 페이지네이션 제거
-
-    console.log(type);
-    let startPage = data.number - 2 > 0 ? data.number - 2 : 1;
-    let endPage = startPage + 4 < data.totalPages ? startPage + 4 : data.totalPages;
-
-    let navHtml = `
-        <a href="#" onclick="loadBoardList('${type}', 0)"><<</a>
-        <a href="#" onclick="loadBoardList('${type}', ${data.number - 1 < 0 ? 0 : data.number - 1})"><</a>
-    `;
-
-    for (let i = startPage; i <= endPage; i++) {
-        if (i === data.number + 1) {
-            navHtml += `<span class="current-page">${i}</span>`;
-        } else {
-            navHtml += `<a href="#" onclick="loadBoardList('${type}', ${i - 1})">${i}</a>`;
-        }
-    }
-
-    navHtml += `
-        <a href="#" onclick="loadBoardList('${type}', ${data.number + 1})">></a>
-        <a href="#" onclick="loadBoardList('${type}', ${data.totalPages - 1})">>></a>
-    `;
-
-    pagination.html(navHtml);
+function loadBoardList(type) {
+    location.href = "/community/board/" + type;
 }

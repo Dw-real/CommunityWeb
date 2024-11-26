@@ -97,7 +97,8 @@
 
   function listReq() {
     const page = [[${page}]];
-    location.href = "/?page=" + page;
+    const boardType = '[[${boardType}]]';
+    location.href = `/community/board/${boardType}?page=${page}`;
   }
 
   function updateReq() {

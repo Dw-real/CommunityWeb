@@ -35,12 +35,32 @@ public class BoardController {
     }
 
     @GetMapping("/board/{type}")
-    public ResponseEntity<?> getBoardList(
+    public String getBoardList(
+            HttpSession session,
             @PathVariable String type,
-            @RequestParam(defaultValue = "0") int page
+            @PageableDefault(page = 1) Pageable pageable,
+            Model model
     ) {
-        Page<BoardDto> boardList = boardService.paging(type, page, 10);
-        return ResponseEntity.ok(boardList);
+        Page<BoardDto> boardList = boardService.paging(type, pageable);
+        UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
+
+        if (loggedInUser != null) {
+            model.addAttribute("loggedIn", true);
+            model.addAttribute("userId", loggedInUser.getId());
+        } else {
+            model.addAttribute("loggedIn", false);
+            model.addAttribute("userId", "");
+        }
+
+        int blockLimit = 10;
+        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
+        int endPage = (boardList.getTotalPages() == 0) ? 1 : Math.min((startPage + blockLimit - 1), boardList.getTotalPages());
+        model.addAttribute("boardList", boardList);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("boardType", type);
+
+        return "list";
     }
 
     @GetMapping("/viewMyPosts")
@@ -76,8 +96,9 @@ public class BoardController {
         return "redirect:/";
     }
 
-    @GetMapping("/{id}")
-    public String findById(@PathVariable Long id, Model model,
+    @GetMapping("/{type}/{id}")
+    public String findById(@PathVariable Long id,
+                           @PathVariable String type, Model model,
                            @PageableDefault(page = 1) Pageable pageable,
                            HttpSession session) {
         // 로그인된 유저 확인
@@ -100,6 +121,7 @@ public class BoardController {
 
         model.addAttribute("board", boardDto);
         model.addAttribute("page", pageable.getPageNumber());
+        model.addAttribute("boardType", type);
         model.addAttribute("commentList", commentDtoList);
         model.addAttribute("formattedCreatedTime", formattedCreatedTime);
         model.addAttribute("isWriter", isWriter);

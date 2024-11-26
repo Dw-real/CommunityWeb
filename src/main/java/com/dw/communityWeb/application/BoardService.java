@@ -72,16 +72,17 @@ public class BoardService {
         }
     }
 
-    public Page<BoardDto> paging(String type, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+    public Page<BoardDto> paging(String type, Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;
+        Pageable pageAble = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
         Page<Board> boardEntities = null;
         
         if ("allBoard".equals(type)) {
-            boardEntities = boardRepository.findAll(pageable);
+            boardEntities = boardRepository.findAll(pageAble);
         } else if ("freeBoard".equals(type)) {
-            boardEntities = boardRepository.findByBoardType(Type.FREE, pageable);
+            boardEntities = boardRepository.findByBoardType(Type.FREE, pageAble);
         } else {
-            boardEntities = boardRepository.findByBoardType(Type.QNA, pageable);
+            boardEntities = boardRepository.findByBoardType(Type.QNA, pageAble);
         }
         
         Page<BoardDto> boardDtos = boardEntities.map(board -> new BoardDto(board.getId(), board.getBoardType(), board.getBoardWriter(), board.getBoardTitle(),
