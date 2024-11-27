@@ -87,8 +87,6 @@
       const boardContents = $('#boardContents').val();
       const userCode = [[${user.userCode}]];
 
-      console.log(boardType);
-
       var header = $("meta[name='_csrf_header']").attr('content');
       var token = $("meta[name='_csrf']").attr('content');
 
@@ -114,7 +112,11 @@
             xhr.setRequestHeader(header, token);
           },
           success: function(response) {
-              window.location.href = '/';
+              if (boardType === "FREE") {
+                window.location.href = "/community/board/freeBoard";
+              } else {
+                window.location.href = "/community/board/qnaBoard";
+              }
           },
           error: function(xhr, status, error) {
               // 오류가 발생하면 처리

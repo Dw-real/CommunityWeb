@@ -91,9 +91,8 @@ public class BoardController {
     }
 
     @PostMapping("/post")
-    public String post(@ModelAttribute BoardDto boardDto) throws IOException {
+    public void post(@ModelAttribute BoardDto boardDto) throws IOException {
         boardService.post(boardDto);
-        return "redirect:/";
     }
 
     @GetMapping("/{type}/{id}")
@@ -149,6 +148,6 @@ public class BoardController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         boardService.delete(id);
-        return "redirect:/";
+        return "redirect:/community/board/allBoard";
     }
 }
