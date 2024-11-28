@@ -2,10 +2,12 @@ package com.dw.communityWeb.presentation.controller;
 
 import com.dw.communityWeb.application.BoardService;
 import com.dw.communityWeb.application.CommentService;
+import com.dw.communityWeb.domain.board.Type;
 import com.dw.communityWeb.presentation.dto.board.BoardUpdateDto;
 import com.dw.communityWeb.presentation.dto.board.BoardDto;
 import com.dw.communityWeb.presentation.dto.comment.CommentDto;
 import com.dw.communityWeb.presentation.dto.user.UserDto;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -91,17 +94,30 @@ public class BoardController {
     }
 
     @PostMapping("/post")
-    public void post(@ModelAttribute BoardDto boardDto) throws IOException {
+    public ResponseEntity<String> post(@ModelAttribute BoardDto boardDto) throws IOException {
         boardService.post(boardDto);
+
+        String url = boardDto.getBoardType() == Type.FREE ? "/community/board/freeBoard" : "/community/board/qnaBoard";
+
+        return ResponseEntity.ok(url);
     }
 
     @GetMapping("/{type}/{id}")
     public String findById(@PathVariable Long id,
                            @PathVariable String type, Model model,
                            @PageableDefault(page = 1) Pageable pageable,
-                           HttpSession session) {
+                           HttpSession session, HttpServletResponse response) throws IOException {
         // 로그인된 유저 확인
         UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            response.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println("<script>alert('로그인이 필요합니다'); location.href='/'</script>");
+            out.flush();
+            return null;
+        }
+
         boolean isWriter = false;
         // 조회수 올리기
         boardService.updateHits(id);
