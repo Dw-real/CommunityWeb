@@ -75,4 +75,14 @@ public class UserService{
         userRepository.updatePwd(id, encodedNewPwd);  // 암호화된 새 비밀번호로 업데이트
         return true;
     }
+
+    @Transactional
+    public boolean updatePwd(String id, String newPwd) {
+        User user = userRepository.findUserById(id);
+
+        // 새 비밀번호로 업데이트
+        String encodedNewPwd = bCryptPasswordEncoder.encode(newPwd);  // 새 비밀번호 암호화
+        userRepository.updatePwd(id, encodedNewPwd);  // 암호화된 새 비밀번호로 업데이트
+        return true;
+    }
 }

@@ -2,6 +2,7 @@ package com.dw.communityWeb.presentation.controller;
 
 import com.dw.communityWeb.application.UserService;
 import com.dw.communityWeb.domain.user.User;
+import com.dw.communityWeb.presentation.dto.login.FindPwdDto;
 import com.dw.communityWeb.presentation.dto.login.PwdUpdateDto;
 import com.dw.communityWeb.presentation.dto.user.UserDto;
 import com.dw.communityWeb.presentation.dto.user.UserIdRequestDto;
@@ -78,6 +79,17 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("해당 정보로 가입된 정보가 존재하지 않습니다.");
         }
+    }
+
+    @PatchMapping("/findPwd")
+    public ResponseEntity<?> updatePwd(@RequestBody FindPwdDto findPwdDto) {
+        boolean isUpdated = userService.updatePwd(findPwdDto.getId(), findPwdDto.getNewPwd());
+        System.out.println(isUpdated);
+        if (!isUpdated) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("비밀번호 변경에 실패했습니다.");
+        }
+
+        return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
     }
 
     @GetMapping("/updatePwd")
