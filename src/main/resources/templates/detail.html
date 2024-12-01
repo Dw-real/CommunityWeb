@@ -9,65 +9,47 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 <body>
-<table>
-  <tr>
-    <th>게시글 번호</th>
-    <td th:text="${board.id}"></td>
-  </tr>
-  <tr>
-    <th>제목</th>
-    <td th:text="${board.boardTitle}"></td>
-  </tr>
-  <tr>
-    <th>작성자</th>
-    <td th:text="${board.boardWriter}"></td>
-  </tr>
-  <tr>
-    <th>작성일</th>
-    <td th:text="${formattedCreatedTime }"></td>
-  </tr>
-  <tr>
-    <th>조회수</th>
-    <td th:text="${board.boardHits}"></td>
-  </tr>
-  <tr>
-    <th>내용</th>
-    <td th:text="${board.boardContents}"></td>
-  </tr>
-  <tr th:if="${board.fileAttached == 1}">
-    <th>첨부 파일</th>
-    <td class="image-container" th:each="fileName: ${board.storedFileName}">
-      <img th:src="@{|/upload/${fileName}|}" alt="" class = "resize-image">
-    </td>
-  </tr>
-</table>
-
-<button id ="listBtn" onclick="listReq()" data-page="[[${page}]]">목록</button>
-<button id = "updateBtn" onclick="updateReq()" data-board-Id=[[${board.id}]]>수정</button>
-<button id = "deleteBtn" onclick="deleteReq()" data-board-Id=[[${board.id}]]>삭제</button>
+<div class="container">
+  <div class="section title-area">
+    <p th:text="${board.boardTitle}"></p>
+    <p th:text="${formattedCreatedTime}"></p>
+  </div>
+  <div class="section writer-area">
+    <p th:text="${board.boardWriter}"></p>
+     <p th:text="'조회수 ' + ${board.boardHits}"></p>
+  </div>
+  <div class="section" th:if="${board.fileAttached == 1}">
+    <div class="image-container" th:each="fileName: ${board.storedFileName}">
+      <img th:src="@{|/upload/${fileName}|}" alt="" class="resize-image">
+    </div>
+  </div>
+  <div class="section">
+    <p th:text="${board.boardContents}"></p>
+  </div>
+  <div class="button-group">
+    <button id="listBtn" onclick="listReq()" data-page="[[${page}]]">목록</button>
+    <button id="updateBtn" onclick="updateReq()" data-board-Id="[[${board.id}]]">수정</button>
+    <button id="deleteBtn" onclick="deleteReq()" data-board-Id="[[${board.id}]]">삭제</button>
+  </div>
+</div>
 
 <!-- 댓글 작성 부분 -->
-<div id="comment-write">
-  <input type="text" id="commentContents">
-  <button id="commentWriteBtn" onclick="commentWrite()">댓글 작성</button>
+<div class="container comment-section">
+  <h3>댓글 작성</h3>
+  <input type="text" id="commentContents" placeholder="댓글 내용을 입력하세요.">
+  <button id="commentWriteBtn" onclick="commentWrite()">작성</button>
 </div>
 
 <!-- 댓글 출력 부분 -->
-<div id="comment-list">
-  <table>
-    <tr>
-      <th>댓글번호</th>
-      <th>작성자</th>
-      <th>내용</th>
-      <th>작성시간</th>
-    </tr>
-    <tr th:each="comment: ${commentList}">
-      <td th:text="${comment.id}"></td>
-      <td th:text="${comment.commentWriter}"></td>
-      <td th:text="${comment.commentContents}"></td>
-      <td th:text="${comment.commentCreatedTime}"></td>
-    </tr>
-  </table>
+<div class="container commentList-section">
+  <h3>댓글 (<span th:text="${commentList.size()} + '개'"></span>)</h3>
+  <div id="comment-list" th:each="comment: ${commentList}">
+    <p>
+      <strong th:text="${comment.commentWriter}"></strong> -
+      <span th:text="${comment.commentContents}"></span>
+      <span id="comment-time" th:text="${#temporals.format(comment.commentCreatedTime, 'yyyy.MM.dd HH:mm')}"></span>
+    </p>
+  </div>
 </div>
 
 <script>
@@ -133,24 +115,26 @@
           "userCode": userCode
       }),
       success: function(response) {
-           let output = "<table>";
-           output += "<tr><th>댓글번호</th>";
-           output += "<th>작성자</th>";
-           output += "<th>내용</th>";
-           output += "<th>작성시간</th></tr>";
-           for (let i in response) {
-               const createdTime = new Date(response[i].commentCreatedTime);
-               const formattedTime = `${createdTime.getFullYear()}-${(createdTime.getMonth() + 1).toString().padStart(2, '0')}-${createdTime.getDate().toString().padStart(2, '0')} ${createdTime.getHours().toString().padStart(2, '0')}:${createdTime.getMinutes().toString().padStart(2, '0')}`;
-               output += "<tr>";
-               output += "<td>" + response[i].id + "</td>";
-               output += "<td>" + response[i].commentWriter + "</td>";
-               output += "<td>" + response[i].commentContents + "</td>";
-               output += "<td>" + formattedTime + "</td>";
-               output += "</tr>";
-           }
-           output += "</table>";
-           document.getElementById('comment-list').innerHTML = output;
-           document.getElementById('commentContents').value = '';
+          let output = "";
+          for (let i in response) {
+            const createdTime = new Date(response[i].commentCreatedTime);
+            const formattedTime = `${createdTime.getFullYear()}-${(createdTime.getMonth() + 1).toString().padStart(2, '0')}-${createdTime.getDate().toString().padStart(2, '0')} ${createdTime.getHours().toString().padStart(2, '0')}:${createdTime.getMinutes().toString().padStart(2, '0')}`;
+            output += `
+              <p>
+                <strong>${response[i].commentWriter}</strong> -
+                <span>${response[i].commentContents}</span>
+                <span id="comment-time">${formattedTime}</span>
+              </p>`;
+          }
+
+          var commentListElement = $('#comment-list');
+          if (commentListElement.length > 0) {
+              commentListElement.html(output);
+          } else {
+              const newCommentList = $('<div id="comment-list">').html(output);
+              $('.container.commentList-section').append(newCommentList);
+          }
+          $('#commentContents').val('');
       },
       error: function(xhr, status, error) {
           try {

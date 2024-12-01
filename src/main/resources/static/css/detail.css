@@ -1,92 +1,85 @@
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: Arial, sans-serif;
     line-height: 1.6;
-    margin: 20px;
-    background-color: #f9f9f9;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-table th, table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-table th {
+    margin: 0;
+    padding: 0;
     background-color: #f4f4f4;
 }
-
-.image-container {
-  display: flex;
-  flex-direction: column;
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-    text-align: center;
-    font-size: 24px;
+.section {
     margin-bottom: 20px;
 }
 
-button {
+.title-area, .writer-area {
     padding: 10px 20px;
-    margin: 5px;
-    float: right;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-#comment-write {
-    margin-top: 20px;
+    border-top: 0.5px solid #4444;
+    border-bottom: 0.5px solid #4444;
     display: flex;
-    margin-left: auto;
-    margin-right: auto;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#comment-write input {
-    width: 85%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+.section p {
+    margin: 0;
+    font-size: 1em;
+    color: #555;
 }
 
-#comment-write button {
-    padding: 10px;
-    background-color: #007bff;
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+}
+.button-group button {
+    padding: 10px 20px;
+    margin-left: 15px;
     border: none;
-    color: white;
-    cursor: pointer;
     border-radius: 5px;
+    background: #007bff;
+    color: #fff;
+    cursor: pointer;
 }
-
-#comment-write button:hover {
-    background-color: #0056b3;
+.button-group button:hover {
+    background: #0056b3;
 }
-
-#comment-list table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+.image-container {
+    margin-top: 10px;
 }
-
-#comment-list th, #comment-list td {
-    padding: 10px;
-    text-align: left;
+.resize-image {
+    max-width: 100%;
+    height: auto;
     border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.comment-section {
+    margin-top: 30px;
+}
+.comment-section input {
+    width: calc(100% - 110px);
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.comment-section button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+.comment-section button:hover {
+    background: #0056b3;
 }
 
-#comment-list th {
-    background-color: #f4f4f4;
+#comment-time {
+    float: right;
 }
