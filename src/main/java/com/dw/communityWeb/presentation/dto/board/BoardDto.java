@@ -30,15 +30,17 @@ public class BoardDto {
     private List<String> originalFileName; // 원본 파일 이름
     private List<String> storedFileName; // 서버 저장용 파일 이름
     private int fileAttached;
+    private int commentCount;
 
     public BoardDto(Long id, Type boardType, String boardWriter, String boardTitle, int boardHits,
-                    LocalDateTime boardCreatedTime) {
+                    LocalDateTime boardCreatedTime, int commentCount) {
         this.id = id;
         this.boardType = boardType;
         this.boardWriter = boardWriter;
         this.boardTitle = boardTitle;
         this.boardHits = boardHits;
         this.boardCreatedTime = boardCreatedTime;
+        this.commentCount = commentCount;
     }
 
     public static BoardDto toDto(Board board) {

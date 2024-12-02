@@ -134,6 +134,9 @@
               const newCommentList = $('<div id="comment-list">').html(output);
               $('.container.commentList-section').append(newCommentList);
           }
+          const commentCount = response.length;
+          $('.container.commentList-section h3 span').text(commentCount + '개');
+
           $('#commentContents').val('');
       },
       error: function(xhr, status, error) {

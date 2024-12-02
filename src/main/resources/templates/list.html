@@ -45,7 +45,7 @@
             <span th:if="${board.boardType.name() == 'FREE'}" th:text="'자유게시판'"></span>
             <span th:if="${board.boardType.name() == 'QNA'}" th:text="'QNA게시판'"></span>
         </td>
-        <td id="boardTitle" style="text-align: left;"><a th:href="@{|/community/${boardType}/${board.id}|(page=${boardList.number + 1})}" th:text="${board.boardTitle}" style="color: inherit; text-decoration: none;"></a></td>
+        <td id="boardTitle" style="text-align: left;"><a th:href="@{|/community/${boardType}/${board.id}|(page=${boardList.number + 1})}" th:text="${board.boardTitle} + ' (' + ${board.commentCount} + ')'" style="color: inherit; text-decoration: none;"></a></td>
         <td th:text="${board.boardWriter}"></td>
         <td th:text="*{#temporals.format(board.boardCreatedTime, 'yyyy-MM-dd HH:mm')}"></td>
         <td th:text="${board.boardHits}"></td>

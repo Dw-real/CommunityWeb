@@ -6,6 +6,7 @@ import com.dw.communityWeb.domain.board.Type;
 import com.dw.communityWeb.domain.user.User;
 import com.dw.communityWeb.infrastructure.BoardFileRepository;
 import com.dw.communityWeb.infrastructure.BoardRepository;
+import com.dw.communityWeb.infrastructure.CommentRepository;
 import com.dw.communityWeb.infrastructure.UserRepository;
 import com.dw.communityWeb.presentation.dto.board.BoardUpdateDto;
 import com.dw.communityWeb.presentation.dto.board.BoardDto;
@@ -29,12 +30,15 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardFileRepository boardFileRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     @Autowired
-    public BoardService(BoardRepository boardRepository, BoardFileRepository boardFileRepository, UserRepository userRepository) {
+    public BoardService(BoardRepository boardRepository, BoardFileRepository boardFileRepository, UserRepository userRepository,
+                        CommentRepository commentRepository) {
         this.boardRepository = boardRepository;
         this.boardFileRepository = boardFileRepository;
         this.userRepository = userRepository;
+        this.commentRepository = commentRepository;
     }
 
     public void post(BoardDto boardDto) throws IOException {
@@ -86,7 +90,7 @@ public class BoardService {
         }
         
         Page<BoardDto> boardDtos = boardEntities.map(board -> new BoardDto(board.getId(), board.getBoardType(), board.getBoardWriter(), board.getBoardTitle(),
-                board.getBoardHits(), board.getCreatedTime()));
+                board.getBoardHits(), board.getCreatedTime(), countByBoardId(board.getId())));
 
         return boardDtos;
     }
@@ -162,8 +166,12 @@ public class BoardService {
         Page<Board> boardEntities = boardRepository.findByUser_UserCode(userCode, pageAble);
 
         Page<BoardDto> boardDtos = boardEntities.map(board -> new BoardDto(board.getId(), board.getBoardType(), board.getBoardWriter(), board.getBoardTitle(),
-                board.getBoardHits(), board.getCreatedTime()));
+                board.getBoardHits(), board.getCreatedTime(), countByBoardId(board.getId())));
 
         return boardDtos;
+    }
+
+    public int countByBoardId(Long boardId) {
+        return commentRepository.countByBoardId(boardId);
     }
 }
