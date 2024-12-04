@@ -79,21 +79,27 @@ public class BoardService {
     public Page<BoardDto> paging(String type, Pageable pageable) {
         int page = pageable.getPageNumber() - 1;
         Pageable pageAble = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
-        Page<Board> boardEntities = null;
-        
+
+        Page<Object[]> result = null;
+
         if ("allBoard".equals(type)) {
-            boardEntities = boardRepository.findAll(pageAble);
+            result = boardRepository.findBoardsWithCommentCount(pageAble);
         } else if ("freeBoard".equals(type)) {
-            boardEntities = boardRepository.findByBoardType(Type.FREE, pageAble);
+            result = boardRepository.findBoardsWithCommentCountByType(Type.FREE, pageAble);
         } else {
-            boardEntities = boardRepository.findByBoardType(Type.QNA, pageAble);
+            result = boardRepository.findBoardsWithCommentCountByType(Type.QNA, pageAble);
         }
-        
-        Page<BoardDto> boardDtos = boardEntities.map(board -> new BoardDto(board.getId(), board.getBoardType(), board.getBoardWriter(), board.getBoardTitle(),
-                board.getBoardHits(), board.getCreatedTime(), countByBoardId(board.getId())));
+
+        Page<BoardDto> boardDtos = result.map(objects -> {
+            Board board = (Board) objects[0];  // 첫 번째 객체는 Board 엔티티
+            Long commentCount = (Long) objects[1];  // 두 번째 객체는 댓글 개수
+            return new BoardDto(board.getId(), board.getBoardType(), board.getBoardWriter(),
+                    board.getBoardTitle(), board.getBoardHits(), board.getCreatedTime(), commentCount);
+        });
 
         return boardDtos;
     }
+
 
 
     @Transactional
@@ -163,15 +169,16 @@ public class BoardService {
     public Page<BoardDto> getMyPosts(Long userCode, Pageable pageable) {
         int page = pageable.getPageNumber() - 1;
         Pageable pageAble = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
-        Page<Board> boardEntities = boardRepository.findByUser_UserCode(userCode, pageAble);
 
-        Page<BoardDto> boardDtos = boardEntities.map(board -> new BoardDto(board.getId(), board.getBoardType(), board.getBoardWriter(), board.getBoardTitle(),
-                board.getBoardHits(), board.getCreatedTime(), countByBoardId(board.getId())));
+        Page<Object[]> result = boardRepository.findBoardsWithCommentCountByUserCode(userCode, pageAble);
+
+        Page<BoardDto> boardDtos = result.map(objects -> {
+            Board board = (Board) objects[0];  // 첫 번째 객체는 Board 엔티티
+            Long commentCount = (Long) objects[1];  // 두 번째 객체는 댓글 개수
+            return new BoardDto(board.getId(), board.getBoardType(), board.getBoardWriter(),
+                    board.getBoardTitle(), board.getBoardHits(), board.getCreatedTime(), commentCount);
+        });
 
         return boardDtos;
-    }
-
-    public int countByBoardId(Long boardId) {
-        return commentRepository.countByBoardId(boardId);
     }
 }
