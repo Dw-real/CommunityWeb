@@ -37,7 +37,7 @@
 
 table {
     width: 100%;
-    margin-top: 60px;
+    margin-top: 90px;
     border-collapse: collapse;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -92,9 +92,7 @@ table td a:hover {
 }
 
 #postBtn {
-    position: absolute;
-    bottom: 465px;
-    right: 10px;
+    margin-left: auto;
     padding: 10px 20px;
     background-color: #0073e6;
     color: white;
