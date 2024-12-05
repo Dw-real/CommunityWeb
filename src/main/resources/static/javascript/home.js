@@ -42,7 +42,6 @@ function toggleDisplay(loggedIn, userId, type) {
         document.getElementById('userId').textContent = userId + "님";
         document.getElementById('updatePwd').style.display = 'inline';
         document.getElementById('logout').style.display = 'inline';
-        document.getElementById('postBtn').style.display = 'inline';
     } else {
         document.getElementById('create').style.display = 'inline';
         document.getElementById('login').style.display = 'inline';
@@ -51,7 +50,6 @@ function toggleDisplay(loggedIn, userId, type) {
         document.getElementById('userId').style.display = 'none';
         document.getElementById('updatePwd').style.display = 'none';
         document.getElementById('logout').style.display = 'none';
-        document.getElementById('postBtn').style.display = 'none';
     }
 
     document.getElementById(type).style.backgroundColor = '#0073e6';

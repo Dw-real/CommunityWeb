@@ -115,11 +115,15 @@ public class BoardController {
     }
 
     @GetMapping("/post")
-    public String postForm(HttpSession session, Model model) {
+    public String postForm(HttpSession session,  HttpServletResponse response, Model model) throws IOException {
         UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
 
-        if (loggedInUser != null)
-            model.addAttribute("user", loggedInUser);
+        if (loggedInUser == null) {
+            showAlert(response);
+            return null;
+        }
+
+        model.addAttribute("user", loggedInUser);
 
         return "post";
     }
@@ -142,10 +146,7 @@ public class BoardController {
         UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
-            response.setContentType("text/html; charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            out.println("<script>alert('로그인이 필요합니다'); location.href='/'</script>");
-            out.flush();
+            showAlert(response);
             return null;
         }
 
@@ -196,5 +197,12 @@ public class BoardController {
     public String delete(@PathVariable Long id) {
         boardService.delete(id);
         return "redirect:/community/board/allBoard";
+    }
+
+    private void showAlert(HttpServletResponse response) throws IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.println("<script>alert('로그인이 필요합니다'); location.href='/'</script>");
+        out.flush();
     }
 }

@@ -6,7 +6,6 @@ import com.dw.communityWeb.domain.board.Type;
 import com.dw.communityWeb.domain.user.User;
 import com.dw.communityWeb.infrastructure.BoardFileRepository;
 import com.dw.communityWeb.infrastructure.BoardRepository;
-import com.dw.communityWeb.infrastructure.CommentRepository;
 import com.dw.communityWeb.infrastructure.UserRepository;
 import com.dw.communityWeb.presentation.dto.board.BoardUpdateDto;
 import com.dw.communityWeb.presentation.dto.board.BoardDto;
@@ -30,15 +29,12 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardFileRepository boardFileRepository;
     private final UserRepository userRepository;
-    private final CommentRepository commentRepository;
 
     @Autowired
-    public BoardService(BoardRepository boardRepository, BoardFileRepository boardFileRepository, UserRepository userRepository,
-                        CommentRepository commentRepository) {
+    public BoardService(BoardRepository boardRepository, BoardFileRepository boardFileRepository, UserRepository userRepository) {
         this.boardRepository = boardRepository;
         this.boardFileRepository = boardFileRepository;
         this.userRepository = userRepository;
-        this.commentRepository = commentRepository;
     }
 
     public void post(BoardDto boardDto) throws IOException {
@@ -49,16 +45,6 @@ public class BoardService {
                 Board board = Board.toEntity(boardDto, userEntity.orElse(null));
                 boardRepository.save(board);
             } else {
-                // 첨부 파일 있음
-                /*
-                    1. DTO에 담긴 파일을 꺼냄
-                    2. 파일의 이름 가져옴
-                    3. 서버 저장용 이름 생성
-                    4. 저장 경로 설정
-                    5. 해당 경로에 파일 저장
-                    6. board_table에 해당 데이터 save 처리
-                    7  board_file_table에 해당 데이터 save 처리
-                */
                 Board board = Board.toFileEntity(boardDto, userEntity.orElse(null));
                 Long savedId = boardRepository.save(board).getId();
                 Board savedBoard = boardRepository.findById(savedId).get();
@@ -90,9 +76,7 @@ public class BoardService {
             result = boardRepository.findBoardsWithCommentCountByType(Type.QNA, pageAble);
         }
 
-        Page<BoardDto> boardDtos = convertToBoardDto(result);
-
-        return boardDtos;
+        return convertToBoardDto(result);
     }
 
     @Transactional
@@ -176,9 +160,7 @@ public class BoardService {
 
         Page<Object[]> result = boardRepository.findBoardsWithCommentCountByBoardTitleContaining(searchKeyword, pageAble);
 
-        Page<BoardDto> boardDtos = convertToBoardDto(result);
-
-        return boardDtos;
+        return convertToBoardDto(result);
     }
 
     public Page<BoardDto> searchByContent(String searchKeyword, Pageable pageable) {
@@ -187,9 +169,7 @@ public class BoardService {
 
         Page<Object[]> result = boardRepository.findBoardsWithCommentCountByBoardContentsContaining(searchKeyword, pageAble);
 
-        Page<BoardDto> boardDtos = convertToBoardDto(result);
-
-        return boardDtos;
+        return convertToBoardDto(result);
     }
 
     public Page<BoardDto> searchByWriter(String searchKeyword, Pageable pageable) {
@@ -198,9 +178,7 @@ public class BoardService {
 
         Page<Object[]> result = boardRepository.findBoardsWithCommentCountByBoardWriterContaining(searchKeyword, pageAble);
 
-        Page<BoardDto> boardDtos = convertToBoardDto(result);
-
-        return boardDtos;
+        return convertToBoardDto(result);
     }
 
     private Page<BoardDto> convertToBoardDto(Page<Object[]> result) {
