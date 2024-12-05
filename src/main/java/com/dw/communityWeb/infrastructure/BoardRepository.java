@@ -12,17 +12,24 @@ import org.springframework.data.repository.query.Param;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
     @Modifying
-    @Query(value = "update Board b set b.boardHits=b.boardHits+1 where b.id=:id")
+    @Query(value = "UPDATE Board b SET b.boardHits=b.boardHits+1 WHERE b.id=:id")
     void updateHits(@Param("id") Long id);
 
-    // 전체 게시글에 대한 댓글 개수를 가져오는 쿼리
     @Query("SELECT b, COUNT(c) FROM Board b LEFT JOIN Comment c ON b.id = c.board.id GROUP BY b")
     Page<Object[]> findBoardsWithCommentCount(Pageable pageable);
 
-    // 특정 타입의 게시글에 대해 댓글 개수를 가져오는 쿼리
     @Query("SELECT b, COUNT(c) FROM Board b LEFT JOIN Comment c ON b.id = c.board.id WHERE b.boardType = :boardType GROUP BY b")
     Page<Object[]> findBoardsWithCommentCountByType(@Param("boardType") Type boardType, Pageable pageable);
 
     @Query("SELECT b, COUNT(c) FROM Board b LEFT JOIN Comment c ON b.id = c.board.id WHERE b.user.userCode = :userCode GROUP BY b")
     Page<Object[]> findBoardsWithCommentCountByUserCode(@Param("userCode") Long userCode, Pageable pageable);
+
+    @Query("SELECT b, COUNT(c) FROM Board b LEFT JOIN Comment c ON b.id = c.board.id WHERE b.boardTitle LIKE %:searchKeyword% GROUP BY b")
+    Page<Object[]> findBoardsWithCommentCountByBoardTitleContaining(@Param("searchKeyword") String searchKeyword, Pageable pageable);
+
+    @Query("SELECT b, COUNT(c) FROM Board b LEFT JOIN Comment c ON b.id = c.board.id WHERE b.boardContents LIKE %:searchKeyword% GROUP BY b")
+    Page<Object[]> findBoardsWithCommentCountByBoardContentsContaining(@Param("searchKeyword") String searchKeyword, Pageable pageable);
+
+    @Query("SELECT b, COUNT(c) FROM Board b LEFT JOIN Comment c ON b.id = c.board.id WHERE b.boardWriter LIKE %:searchKeyword% GROUP BY b")
+    Page<Object[]> findBoardsWithCommentCountByBoardWriterContaining(@Param("searchKeyword") String searchKeyword, Pageable pageable);
 }

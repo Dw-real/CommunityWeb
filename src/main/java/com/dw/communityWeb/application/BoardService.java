@@ -90,17 +90,10 @@ public class BoardService {
             result = boardRepository.findBoardsWithCommentCountByType(Type.QNA, pageAble);
         }
 
-        Page<BoardDto> boardDtos = result.map(objects -> {
-            Board board = (Board) objects[0];  // 첫 번째 객체는 Board 엔티티
-            Long commentCount = (Long) objects[1];  // 두 번째 객체는 댓글 개수
-            return new BoardDto(board.getId(), board.getBoardType(), board.getBoardWriter(),
-                    board.getBoardTitle(), board.getBoardHits(), board.getCreatedTime(), commentCount);
-        });
+        Page<BoardDto> boardDtos = convertToBoardDto(result);
 
         return boardDtos;
     }
-
-
 
     @Transactional
     public void updateHits(Long id) {
@@ -172,13 +165,50 @@ public class BoardService {
 
         Page<Object[]> result = boardRepository.findBoardsWithCommentCountByUserCode(userCode, pageAble);
 
-        Page<BoardDto> boardDtos = result.map(objects -> {
+        Page<BoardDto> boardDtos = convertToBoardDto(result);
+
+        return boardDtos;
+    }
+
+    public Page<BoardDto> searchByTitle(String searchKeyword, Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;
+        Pageable pageAble = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
+
+        Page<Object[]> result = boardRepository.findBoardsWithCommentCountByBoardTitleContaining(searchKeyword, pageAble);
+
+        Page<BoardDto> boardDtos = convertToBoardDto(result);
+
+        return boardDtos;
+    }
+
+    public Page<BoardDto> searchByContent(String searchKeyword, Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;
+        Pageable pageAble = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
+
+        Page<Object[]> result = boardRepository.findBoardsWithCommentCountByBoardContentsContaining(searchKeyword, pageAble);
+
+        Page<BoardDto> boardDtos = convertToBoardDto(result);
+
+        return boardDtos;
+    }
+
+    public Page<BoardDto> searchByWriter(String searchKeyword, Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;
+        Pageable pageAble = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
+
+        Page<Object[]> result = boardRepository.findBoardsWithCommentCountByBoardWriterContaining(searchKeyword, pageAble);
+
+        Page<BoardDto> boardDtos = convertToBoardDto(result);
+
+        return boardDtos;
+    }
+
+    private Page<BoardDto> convertToBoardDto(Page<Object[]> result) {
+        return result.map(objects -> {
             Board board = (Board) objects[0];  // 첫 번째 객체는 Board 엔티티
             Long commentCount = (Long) objects[1];  // 두 번째 객체는 댓글 개수
             return new BoardDto(board.getId(), board.getBoardType(), board.getBoardWriter(),
                     board.getBoardTitle(), board.getBoardHits(), board.getCreatedTime(), commentCount);
         });
-
-        return boardDtos;
     }
 }

@@ -66,6 +66,37 @@ public class BoardController {
         return "list";
     }
 
+    @GetMapping("/search")
+    public String searchPosts(@RequestParam String searchType,
+                              @RequestParam String searchKeyword,
+                              @PageableDefault(page = 1) Pageable pageable,
+                              Model model) {
+        Page<BoardDto> searchResults;
+
+        switch (searchType) {
+            case "title":
+                searchResults = boardService.searchByTitle(searchKeyword, pageable);
+                break;
+            case "content":
+                searchResults = boardService.searchByContent(searchKeyword, pageable);
+                break;
+            case "writer":
+                searchResults = boardService.searchByWriter(searchKeyword, pageable);
+                break;
+            default:
+                searchResults = null;
+        }
+
+        int blockLimit = 10;
+        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
+        int endPage = (searchResults.getTotalPages() == 0) ? 1 : Math.min((startPage + blockLimit - 1), searchResults.getTotalPages());
+        model.addAttribute("boardList", searchResults);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        return "list";
+    }
+
     @GetMapping("/viewMyPosts")
     public String viewMyPosts(HttpSession session, @PageableDefault(page = 1) Pageable pageable, Model model) {
         UserDto loggedInUser = (UserDto) session.getAttribute("loggedInUser");

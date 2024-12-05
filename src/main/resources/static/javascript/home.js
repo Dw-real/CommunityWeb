@@ -54,7 +54,7 @@ function toggleDisplay(loggedIn, userId, type) {
         document.getElementById('postBtn').style.display = 'none';
     }
 
-    document.getElementById(type).style.backgroundColor = 'lightblue';
+    document.getElementById(type).style.backgroundColor = '#0073e6';
     document.getElementById(type).style.color = 'white';
 }
 
