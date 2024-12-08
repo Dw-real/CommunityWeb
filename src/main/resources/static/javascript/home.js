@@ -32,6 +32,22 @@ document.getElementById("updatePwd").addEventListener('click', function() {
     location.href = "/user/updatePwd";
 });
 
+document.getElementById('deleteId').addEventListener('click', function () {
+    document.getElementById('passwordModal').style.display = 'block';
+});
+
+document.querySelector('.close').addEventListener('click', function () {
+    document.getElementById('passwordModal').style.display = 'none';
+});
+
+window.addEventListener('click', function (event) {
+    const modal = document.getElementById('passwordModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+
 function toggleDisplay(loggedIn, userId, type) {
     if (loggedIn) { // 로그인 성공
         document.getElementById('create').style.display = 'none';

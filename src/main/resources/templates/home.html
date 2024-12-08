@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta name="_csrf" th:content="${_csrf.token}">
     <title>게시판</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/home.css">
@@ -45,7 +47,17 @@
     <ul>
         <li id="viewPosts">내 글 보기</li>
         <li id="updatePwd">비밀번호 변경</li>
+        <li id="deleteId">계정 탈퇴</li>
     </ul>
+</div>
+
+<div id="passwordModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>비밀번호를 입력하세요</p>
+        <input type="password" id="pwdInput" placeholder="비밀번호">
+        <button id="confirmDelete">확인</button>
+    </div>
 </div>
 
 <script>
@@ -55,6 +67,39 @@
 
         toggleDisplay(loggedIn, userId);
     };
+
+    document.getElementById('confirmDelete').addEventListener('click', function() {
+        const pwd = document.getElementById('pwdInput').value;
+        if (pwd) {
+            var header = $("meta[name='_csrf_header']").attr('content');
+            var token = $("meta[name='_csrf']").attr('content');
+
+            $.ajax({
+              type: 'DELETE',
+              url: '/user/delete?pwd=' + encodeURIComponent(pwd),
+              contentType:'application/json',
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+              },
+              success: function(response) {
+                alert('탈퇴되었습니다.');
+                window.location.href = '/';
+                document.getElementById('passwordModal').style.display = 'none';
+              },
+              error: function(xhr, status, error) {
+                  try {
+                      // 서버에서 반환된 오류 메시지를 추출하여 alert로 표시
+                      const errorResponse = JSON.parse(xhr.responseText);
+                      alert(errorResponse.errors.join("\n"));
+                  } catch (e) {
+                      alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+                  }
+              }
+            });
+        } else {
+            alert('비밀번호를 입력하세요.');
+        }
+    });
 </script>
 
 <script src="/javascript/home.js"></script>

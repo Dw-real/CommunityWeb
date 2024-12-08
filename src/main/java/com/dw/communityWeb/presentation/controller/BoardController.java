@@ -202,7 +202,7 @@ public class BoardController {
     private void showAlert(HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset=UTF-8");
         PrintWriter out = response.getWriter();
-        out.println("<script>alert('로그인이 필요합니다'); location.href='/'</script>");
+        out.println("<script>alert('로그인이 필요합니다'); history.back();</script>");
         out.flush();
     }
 }

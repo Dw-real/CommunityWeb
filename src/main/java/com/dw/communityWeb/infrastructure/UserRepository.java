@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+    @Query(value = "SELECT u FROM User u WHERE u.userCode = :userCode")
+    User findByUserCode(Long userCode);
+
     @Query(value = "SELECT COUNT(*) FROM User WHERE id = :id")
     Long checkId(String id);  // id 존재 여부를 반환하는 메소드
 
@@ -21,4 +24,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query(value = "UPDATE User u set u.pwd = :pwd WHERE u.id = :id")
     void updatePwd(String id, String pwd);
+
+    void deleteByUserCode(Long userCode);
 }

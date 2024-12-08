@@ -108,4 +108,22 @@ public class UserController {
 
         return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteUser(@RequestParam String pwd, HttpSession session) {
+        UserDto userDto = (UserDto) session.getAttribute("loggedInUser");
+
+        if (pwd == null || userDto == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("탈퇴 처리에 오류가 생겼습니다");
+        }
+
+        if (userService.checkPwd(userDto.getUserCode(), pwd)) {
+            System.out.println(userDto.getUserCode());
+            userService.deleteUser(userDto.getUserCode());
+            session.invalidate();
+            return ResponseEntity.ok("탈퇴 성공");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호를 확인하세요.");
+        }
+    }
 }
